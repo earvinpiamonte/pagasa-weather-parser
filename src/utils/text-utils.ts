@@ -1,6 +1,6 @@
 import { PATTERNS } from "../constants/patterns";
 
-export function splitPreservingParentheses(text: string): string[] {
+export const splitPreservingParentheses = (text: string): string[] => {
   const result: string[] = [];
   let current = "";
   let parenthesesDepth = 0;
@@ -38,12 +38,14 @@ export function splitPreservingParentheses(text: string): string[] {
   }
 
   return result.filter((segment) => segment.length > 0);
-}
+};
 
-export function extractMunicipalities(areaText: string): {
+export const extractMunicipalities = (
+  areaText: string,
+): {
   name: string;
   municipalities: string[];
-} {
+} => {
   const municipalities: string[] = [];
   let match;
 
@@ -65,4 +67,4 @@ export function extractMunicipalities(areaText: string): {
     .trim();
 
   return { name: cleanName, municipalities };
-}
+};

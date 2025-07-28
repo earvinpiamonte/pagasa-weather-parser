@@ -5,11 +5,13 @@ import {
   extractMunicipalities,
 } from "../utils/text-utils";
 
-export function extractRegionsFromBlock(block: string): {
+export const extractRegionsFromBlock = (
+  block: string,
+): {
   Luzon: Area[];
   Visayas: Area[];
   Mindanao: Area[];
-} {
+} => {
   const rawAreaText = extractTCWSAreaText(block);
   const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
 
@@ -18,9 +20,9 @@ export function extractRegionsFromBlock(block: string): {
     Visayas: [],
     Mindanao: [],
   };
-}
+};
 
-export function extractTCWSAreaText(block: string): string {
+export const extractTCWSAreaText = (block: string): string => {
   const lines = block
     .split("\n")
     .map((line) => line.trim())
@@ -67,9 +69,9 @@ export function extractTCWSAreaText(block: string): string {
     .trim()
     .replace(PATTERNS.cleanExtra, "")
     .replace(PATTERNS.normalizeSpace, " ");
-}
+};
 
-export function parseAreasText(text: string): Area[] {
+export const parseAreasText = (text: string): Area[] => {
   const cleanText = text
     .replace(PATTERNS.normalizeSpace, " ")
     .replace(/([,;])\s+and\s+/g, "$1 ")
@@ -79,9 +81,9 @@ export function parseAreasText(text: string): Area[] {
   return segments
     .map((segment) => parseArea(segment.trim()))
     .filter((detail) => detail !== null) as Area[];
-}
+};
 
-export function mergeAreas(areas: Area[]): Area[] {
+export const mergeAreas = (areas: Area[]): Area[] => {
   const merged = new Map<string, Area>();
 
   for (const area of areas) {
@@ -123,13 +125,13 @@ export function mergeAreas(areas: Area[]): Area[] {
   }
 
   return Array.from(merged.values());
-}
+};
 
-export function containsAreaNames(line: string): boolean {
+export const containsAreaNames = (line: string): boolean => {
   return !PATTERNS.skipMetadata.test(line) && PATTERNS.areaNames.test(line);
-}
+};
 
-export function parseArea(areaText: string): Area | null {
+export const parseArea = (areaText: string): Area | null => {
   const cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
   if (!cleanArea || cleanArea.length < 3) return null;
 
@@ -172,4 +174,4 @@ export function parseArea(areaText: string): Area | null {
   if (municipalities.length > 0) result.locals = municipalities;
 
   return result;
-}
+};

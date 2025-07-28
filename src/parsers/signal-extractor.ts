@@ -2,7 +2,7 @@ import { PATTERNS } from "../constants/patterns";
 import { WindSignals, Regions } from "../types/index";
 import { extractRegionsFromBlock } from "./area-parser";
 
-export function extractSignals(text: string): WindSignals {
+export const extractSignals = (text: string): WindSignals => {
   const signals: { [key: string]: Regions } = {};
   const tcwsMatch = text.match(PATTERNS.tcws);
 
@@ -28,9 +28,9 @@ export function extractSignals(text: string): WindSignals {
   }
 
   return { signals };
-}
+};
 
-export function extractSignalBlocks(tcwsSection: string): string[] {
+export const extractSignalBlocks = (tcwsSection: string): string[] => {
   const blocks: string[] = [];
   const lines = tcwsSection.split("\n");
   let currentBlock = "";
@@ -65,12 +65,12 @@ export function extractSignalBlocks(tcwsSection: string): string[] {
   }
 
   return blocks.filter((block) => block.trim().length > 0);
-}
+};
 
-export function extractSignalNumber(block: string): string | null {
+export const extractSignalNumber = (block: string): string | null => {
   const numberMatch = block.match(PATTERNS.signalMatch);
   if (numberMatch) return numberMatch[1];
 
   const tcwsMatch = block.match(PATTERNS.tcwsNumber);
   return tcwsMatch ? tcwsMatch[1] : null;
-}
+};

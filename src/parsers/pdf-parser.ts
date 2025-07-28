@@ -3,7 +3,7 @@ import pdf from "pdf-parse";
 import { WindSignals } from "../types/index";
 import { extractSignals } from "./signal-extractor";
 
-export async function parsePDF(filePath: string): Promise<WindSignals> {
+export const parsePDF = async (filePath: string): Promise<WindSignals> => {
   try {
     const dataBuffer = fs.readFileSync(filePath);
     const data = await pdf(dataBuffer);
@@ -13,9 +13,9 @@ export async function parsePDF(filePath: string): Promise<WindSignals> {
       `Failed to parse PDF: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-}
+};
 
-export async function parseBuffer(buffer: Buffer): Promise<WindSignals> {
+export const parseBuffer = async (buffer: Buffer): Promise<WindSignals> => {
   try {
     const data = await pdf(buffer);
     return extractSignals(data.text);
@@ -24,4 +24,4 @@ export async function parseBuffer(buffer: Buffer): Promise<WindSignals> {
       `Failed to parse PDF buffer: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-}
+};
