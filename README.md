@@ -228,4 +228,4 @@ Currently supports PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS 
 
 ## Maintainer
 
-Noel Earvin Piamonte
+Designed and developed by [Noel Earvin Piamonte](https://earv.in)
