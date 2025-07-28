@@ -39,7 +39,7 @@ The parser returns a structured JSON object with the following stringified examp
 {
   "signals": {
     "1": {
-      "areas": {
+      "regions": {
         "Luzon": [
           {
             "name": "Ilocos Norte",
@@ -131,7 +131,7 @@ The parser returns a structured JSON object with the following stringified examp
       }
     },
     "2": {
-      "areas": {
+      "regions": {
         "Luzon": [
           {
             "name": "Ilocos Norte",
