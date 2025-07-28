@@ -1,19 +1,19 @@
-export interface AreaDetail {
+export interface Area {
   name: string;
   parts?: string[];
   locals?: string[];
 }
 
-export interface SignalArea {
+export interface Regions {
   areas: {
-    Luzon: AreaDetail[];
-    Visayas: AreaDetail[];
-    Mindanao: AreaDetail[];
+    Luzon: Area[];
+    Visayas: Area[];
+    Mindanao: Area[];
   };
 }
 
 export interface WindSignals {
   signals: {
-    [key: string]: SignalArea;
+    [key: string]: Regions;
   };
 }

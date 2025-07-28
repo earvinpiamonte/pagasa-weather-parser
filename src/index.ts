@@ -1,5 +1,5 @@
 import { parsePDF, parseBuffer } from "./parsers/pdf-parser";
-import { WindSignals, SignalArea, AreaDetail } from "./types/index";
+import { WindSignals, Regions, Area } from "./types/index";
 
 // Main export object that matches the required import pattern
 const tcbParser = {
@@ -18,4 +18,4 @@ const tcbParser = {
 
 export default tcbParser;
 
-export { WindSignals, SignalArea, AreaDetail };
+export { WindSignals, Regions, Area };

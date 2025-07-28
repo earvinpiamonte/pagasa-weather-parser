@@ -1,20 +1,20 @@
 import { PATTERNS, SKIP_TERMS } from "../constants/patterns";
-import { AreaDetail } from "../types/index";
+import { Area } from "../types/index";
 import {
   splitPreservingParentheses,
   extractMunicipalities,
 } from "../utils/text-utils";
 
-export function extractAreasFromBlock(block: string): {
-  Luzon: AreaDetail[];
-  Visayas: AreaDetail[];
-  Mindanao: AreaDetail[];
+export function extractRegionsFromBlock(block: string): {
+  Luzon: Area[];
+  Visayas: Area[];
+  Mindanao: Area[];
 } {
   const areaText = extractTCWSAreaText(block);
-  const areas = areaText ? parseFullAreaText(areaText) : [];
+  const areas = areaText ? parseAreasText(areaText) : [];
 
   return {
-    Luzon: mergeAndCleanAreas(areas),
+    Luzon: mergeAreas(areas),
     Visayas: [],
     Mindanao: [],
   };
@@ -69,7 +69,7 @@ export function extractTCWSAreaText(block: string): string {
     .replace(PATTERNS.normalizeSpace, " ");
 }
 
-export function parseFullAreaText(text: string): AreaDetail[] {
+export function parseAreasText(text: string): Area[] {
   const cleanText = text
     .replace(PATTERNS.normalizeSpace, " ")
     .replace(/([,;])\s+and\s+/g, "$1 ")
@@ -77,12 +77,12 @@ export function parseFullAreaText(text: string): AreaDetail[] {
   const segments = splitPreservingParentheses(cleanText);
 
   return segments
-    .map((segment) => parseAreaDetail(segment.trim()))
-    .filter((detail) => detail !== null) as AreaDetail[];
+    .map((segment) => parseArea(segment.trim()))
+    .filter((detail) => detail !== null) as Area[];
 }
 
-export function mergeAndCleanAreas(areas: AreaDetail[]): AreaDetail[] {
-  const merged = new Map<string, AreaDetail>();
+export function mergeAreas(areas: Area[]): Area[] {
+  const merged = new Map<string, Area>();
 
   for (const area of areas) {
     const key = area.name.toLowerCase();
@@ -129,7 +129,7 @@ export function containsAreaNames(line: string): boolean {
   return !PATTERNS.skipMetadata.test(line) && PATTERNS.areaNames.test(line);
 }
 
-export function parseAreaDetail(areaString: string): AreaDetail | null {
+export function parseArea(areaString: string): Area | null {
   const cleanArea = areaString.trim().replace(PATTERNS.cleanExtra, "");
   if (!cleanArea || cleanArea.length < 3) return null;
 
@@ -166,7 +166,7 @@ export function parseAreaDetail(areaString: string): AreaDetail | null {
   workingArea = workingArea.replace(PATTERNS.cleanPortion, "");
 
   const { name, municipalities } = extractMunicipalities(workingArea);
-  const result: AreaDetail = { name: name.trim() };
+  const result: Area = { name: name.trim() };
 
   if (partDescriptors.length > 0) result.parts = partDescriptors;
   if (municipalities.length > 0) result.locals = municipalities;

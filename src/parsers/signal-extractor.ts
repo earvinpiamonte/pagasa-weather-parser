@@ -1,9 +1,9 @@
 import { PATTERNS } from "../constants/patterns";
-import { WindSignals, SignalArea } from "../types/index";
-import { extractAreasFromBlock } from "./area-parser";
+import { WindSignals, Regions } from "../types/index";
+import { extractRegionsFromBlock } from "./area-parser";
 
 export function extractSignals(text: string): WindSignals {
-  const signals: { [key: string]: SignalArea } = {};
+  const signals: { [key: string]: Regions } = {};
   const tcwsMatch = text.match(PATTERNS.tcws);
 
   if (!tcwsMatch) {
@@ -16,12 +16,12 @@ export function extractSignals(text: string): WindSignals {
   for (const block of signalBlocks) {
     const signalNumber = extractSignalNumber(block);
     if (signalNumber) {
-      const areas = extractAreasFromBlock(block);
+      const regions = extractRegionsFromBlock(block);
       signals[signalNumber] = {
         areas: {
-          Luzon: areas.Luzon,
-          Visayas: areas.Visayas,
-          Mindanao: areas.Mindanao,
+          Luzon: regions.Luzon,
+          Visayas: regions.Visayas,
+          Mindanao: regions.Mindanao,
         },
       };
     }

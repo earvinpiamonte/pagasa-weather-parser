@@ -218,13 +218,13 @@ Parses a PAGASA TCB PDF from a buffer.
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import tcbParser, { WindSignals, SignalArea, AreaDetail } from "@earvinpiamonte/pagasa-tcb-parser";
+import tcbParser, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
 const result: WindSignals = await tcbParser.parsePDF('/path/to/file.pdf');
 
-// Individual parts:
-const signal1: SignalArea = result.signals['1'];
-const area: AreaDetail = signal1.areas.Luzon[0];
+// You can also type individual parts:
+const signal1: Regions = result.signals['1'];
+const area: Area = signal1.areas.Luzon[0];
 ```
 
 ## Supported Formats
