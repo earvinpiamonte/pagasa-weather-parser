@@ -2,7 +2,7 @@ import { parsePDF, parseBuffer } from "./parsers/pdf-parser";
 import { ParsedSignals, SignalArea, AreaDetail } from "./types/index";
 
 // Main export object that matches the required import pattern
-const storms = {
+const bulletin = {
   get signals() {
     return {};
   },
@@ -16,6 +16,6 @@ const storms = {
   },
 };
 
-export default storms;
+export default bulletin;
 
 export { ParsedSignals, SignalArea, AreaDetail };

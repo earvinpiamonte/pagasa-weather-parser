@@ -13,16 +13,16 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 ### Basic Usage
 
 ```javascript
-import storms from "@earvinpiamonte/pagasa-tcb-parser"
+import bulletin from "@earvinpiamonte/pagasa-tcb-parser"
 
 // Parse a PDF file
-const result = await storms.parsePDF('/path/to/TCB#16_emong.pdf');
+const result = await bulletin.parsePDF('/path/to/TCB#16_emong.pdf');
 
 console.log(result.signals);
 
 // Parse from buffer
 const buffer = fs.readFileSync('/path/to/TCB#16_emong.pdf');
-const result = await storms.parseBuffer(buffer);
+const result = await bulletin.parseBuffer(buffer);
 
 console.log(result.signals);
 ```
@@ -194,7 +194,7 @@ The parser returns a structured JSON object with the following stringified examp
 
 ## API
 
-### `storms.parsePDF(filePath: string): Promise<ParsedSignals>`
+### `bulletin.parsePDF(filePath: string): Promise<ParsedSignals>`
 
 Parses a PAGASA TCB PDF file from a file path.
 
@@ -203,7 +203,7 @@ Parses a PAGASA TCB PDF file from a file path.
 
 **Returns:** Promise that resolves to a `ParsedSignals` object
 
-### `storms.parseBuffer(buffer: Buffer): Promise<ParsedSignals>`
+### `bulletin.parseBuffer(buffer: Buffer): Promise<ParsedSignals>`
 
 Parses a PAGASA TCB PDF from a buffer.
 
@@ -217,9 +217,9 @@ Parses a PAGASA TCB PDF from a buffer.
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import storms, { ParsedSignals, SignalArea } from "@earvinpiamonte/pagasa-tcb-parser";
+import bulletin, { ParsedSignals, SignalArea } from "@earvinpiamonte/pagasa-tcb-parser";
 
-const result: ParsedSignals = await storms.parsePDF('/path/to/file.pdf');
+const result: ParsedSignals = await bulletin.parsePDF('/path/to/file.pdf');
 ```
 
 ## Supported Formats
