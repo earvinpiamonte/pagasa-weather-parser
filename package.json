@@ -1,0 +1,36 @@
+{
+  "name": "@earvinpiamonte/pagasa-tcb-parser",
+  "version": "1.0.0",
+  "description": "A TypeScript library for parsing PAGASA weather bulletin PDF files",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "test": "node dist/test.js"
+  },
+  "keywords": [
+    "pagasa",
+    "weather",
+    "philippines",
+    "pdf",
+    "parser",
+    "typhoon",
+    "tropical-cyclone"
+  ],
+  "author": "Noel Earvin Piamonte",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "pdf-parse": "^1.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
