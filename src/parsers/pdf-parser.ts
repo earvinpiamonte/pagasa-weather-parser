@@ -1,11 +1,11 @@
-import * as fs from "fs";
+import { readFileSync } from "fs";
 import pdf from "pdf-parse";
 import { WindSignals } from "../types/index";
 import { extractSignals } from "./signal-extractor";
 
 export const parsePDF = async (filePath: string): Promise<WindSignals> => {
   try {
-    const dataBuffer = fs.readFileSync(filePath);
+    const dataBuffer = readFileSync(filePath);
     const data = await pdf(dataBuffer);
 
     return extractSignals(data.text);
