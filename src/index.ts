@@ -1,12 +1,7 @@
 import { parsePDF, parseBuffer } from "./parsers/pdf-parser";
 import { WindSignals, Regions, Area } from "./types/index";
 
-// Main export object that matches the required import pattern
 const tcbParser = {
-  get signals() {
-    return {};
-  },
-
   async parsePDF(filePath: string): Promise<WindSignals> {
     return parsePDF(filePath);
   },
