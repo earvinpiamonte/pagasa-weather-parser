@@ -13,19 +13,26 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 ### Basic Usage
 
 ```javascript
-import fs from "fs"
+import { readFileSync } from "fs"
 import tcbParser from "@earvinpiamonte/pagasa-tcb-parser"
 
-// Parse a PDF file
+// Example 1: Parse a PDF file
 const result = await tcbParser.parsePDF('/path/to/TCB#16_emong.pdf');
 
 console.log(result.signals);
 
-// Parse from buffer
-const buffer = fs.readFileSync('/path/to/TCB#16_emong.pdf');
-const result = await tcbParser.parseBuffer(buffer);
+// Get formatted JSON output
+const jsonOutput = JSON.stringify(result, null, 2);
 
-console.log(result.signals);
+console.log(jsonOutput);
+
+
+
+// Example 2: Parse from buffer
+const buffer = readFileSync('/path/to/TCB#16_emong.pdf');
+const result2 = await tcbParser.parseBuffer(buffer);
+
+console.log(result2.signals);
 ```
 
 ### Example output
