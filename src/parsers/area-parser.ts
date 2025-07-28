@@ -10,11 +10,11 @@ export function extractRegionsFromBlock(block: string): {
   Visayas: Area[];
   Mindanao: Area[];
 } {
-  const areaText = extractTCWSAreaText(block);
-  const areas = areaText ? parseAreasText(areaText) : [];
+  const rawAreaText = extractTCWSAreaText(block);
+  const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
 
   return {
-    Luzon: mergeAreas(areas),
+    Luzon: mergeAreas(parsedAreas),
     Visayas: [],
     Mindanao: [],
   };
@@ -129,8 +129,8 @@ export function containsAreaNames(line: string): boolean {
   return !PATTERNS.skipMetadata.test(line) && PATTERNS.areaNames.test(line);
 }
 
-export function parseArea(areaString: string): Area | null {
-  const cleanArea = areaString.trim().replace(PATTERNS.cleanExtra, "");
+export function parseArea(areaText: string): Area | null {
+  const cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
   if (!cleanArea || cleanArea.length < 3) return null;
 
   const partDescriptors: string[] = [];

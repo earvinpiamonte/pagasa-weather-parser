@@ -40,7 +40,7 @@ export function splitPreservingParentheses(text: string): string[] {
   return result.filter((segment) => segment.length > 0);
 }
 
-export function extractMunicipalities(areaString: string): {
+export function extractMunicipalities(areaText: string): {
   name: string;
   municipalities: string[];
 } {
@@ -49,7 +49,7 @@ export function extractMunicipalities(areaString: string): {
 
   // Reset pattern to start from beginning
   PATTERNS.parentheses.lastIndex = 0;
-  while ((match = PATTERNS.parentheses.exec(areaString)) !== null) {
+  while ((match = PATTERNS.parentheses.exec(areaText)) !== null) {
     const munis = match[1]
       .split(",")
       .map((m) => m.trim())
@@ -57,7 +57,7 @@ export function extractMunicipalities(areaString: string): {
     municipalities.push(...munis);
   }
 
-  const cleanName = areaString
+  const cleanName = areaText
     .replace(/\s*\([^)]*\)/g, "")
     .replace(PATTERNS.cleanExtra, "")
     .replace(PATTERNS.restPattern, "")

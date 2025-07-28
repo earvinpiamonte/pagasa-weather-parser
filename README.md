@@ -224,7 +224,7 @@ const result: WindSignals = await tcbParser.parsePDF('/path/to/file.pdf');
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
-const area: Area = signal1.areas.Luzon[0];
+const area: Area = signal1.regions.Luzon[0];
 ```
 
 ## Supported Formats

@@ -18,7 +18,7 @@ export function extractSignals(text: string): WindSignals {
     if (signalNumber) {
       const regions = extractRegionsFromBlock(block);
       signals[signalNumber] = {
-        areas: {
+        regions: {
           Luzon: regions.Luzon,
           Visayas: regions.Visayas,
           Mindanao: regions.Mindanao,
