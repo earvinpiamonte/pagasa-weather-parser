@@ -9,8 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepare": "npm run build",
-    "test": "node dist/test.js"
+    "prepare": "npm run build"
   },
   "keywords": [
     "pagasa",
