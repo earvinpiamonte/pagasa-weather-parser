@@ -1,8 +1,8 @@
 import { PATTERNS } from "../constants/patterns";
-import { ParsedSignals, SignalArea } from "../types/index";
+import { WindSignals, SignalArea } from "../types/index";
 import { extractAreasFromBlock } from "./area-parser";
 
-export function extractSignals(text: string): ParsedSignals {
+export function extractSignals(text: string): WindSignals {
   const signals: { [key: string]: SignalArea } = {};
   const tcwsMatch = text.match(PATTERNS.tcws);
 

@@ -1,21 +1,21 @@
 import { parsePDF, parseBuffer } from "./parsers/pdf-parser";
-import { ParsedSignals, SignalArea, AreaDetail } from "./types/index";
+import { WindSignals, SignalArea, AreaDetail } from "./types/index";
 
 // Main export object that matches the required import pattern
-const bulletin = {
+const tcbParser = {
   get signals() {
     return {};
   },
 
-  async parsePDF(filePath: string): Promise<ParsedSignals> {
+  async parsePDF(filePath: string): Promise<WindSignals> {
     return parsePDF(filePath);
   },
 
-  async parseBuffer(buffer: Buffer): Promise<ParsedSignals> {
+  async parseBuffer(buffer: Buffer): Promise<WindSignals> {
     return parseBuffer(buffer);
   },
 };
 
-export default bulletin;
+export default tcbParser;
 
-export { ParsedSignals, SignalArea, AreaDetail };
+export { WindSignals, SignalArea, AreaDetail };

@@ -12,7 +12,7 @@ export interface SignalArea {
   };
 }
 
-export interface ParsedSignals {
+export interface WindSignals {
   signals: {
     [key: string]: SignalArea;
   };

@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import pdf from "pdf-parse";
-import { ParsedSignals } from "../types/index";
+import { WindSignals } from "../types/index";
 import { extractSignals } from "./signal-extractor";
 
-export async function parsePDF(filePath: string): Promise<ParsedSignals> {
+export async function parsePDF(filePath: string): Promise<WindSignals> {
   try {
     const dataBuffer = fs.readFileSync(filePath);
     const data = await pdf(dataBuffer);
@@ -15,7 +15,7 @@ export async function parsePDF(filePath: string): Promise<ParsedSignals> {
   }
 }
 
-export async function parseBuffer(buffer: Buffer): Promise<ParsedSignals> {
+export async function parseBuffer(buffer: Buffer): Promise<WindSignals> {
   try {
     const data = await pdf(buffer);
     return extractSignals(data.text);
