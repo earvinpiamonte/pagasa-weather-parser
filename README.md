@@ -1,4 +1,4 @@
-# @earvinpiamonte/pagasa-tcb-parser
+# `pagasa-tcb-parser`
 
 A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) PDF files.
 
