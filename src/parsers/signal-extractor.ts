@@ -15,8 +15,10 @@ export const extractSignals = (text: string): WindSignals => {
 
   for (const block of signalBlocks) {
     const signalNumber = extractSignalNumber(block);
+
     if (signalNumber) {
       const regions = extractRegionsFromBlock(block);
+
       signals[signalNumber] = {
         regions: {
           Luzon: regions.Luzon,
@@ -46,6 +48,7 @@ export const extractSignalBlocks = (tcwsSection: string): string[] => {
       if (currentBlock && inSignalBlock) {
         blocks.push(currentBlock);
       }
+
       currentBlock = line + "\n";
       inSignalBlock = true;
     } else if (inSignalBlock) {
@@ -69,8 +72,10 @@ export const extractSignalBlocks = (tcwsSection: string): string[] => {
 
 export const extractSignalNumber = (block: string): string | null => {
   const numberMatch = block.match(PATTERNS.signalMatch);
+
   if (numberMatch) return numberMatch[1];
 
   const tcwsMatch = block.match(PATTERNS.tcwsNumber);
+
   return tcwsMatch ? tcwsMatch[1] : null;
 };

@@ -20,16 +20,19 @@ export const splitPreservingParentheses = (text: string): string[] => {
       if (current.trim()) {
         result.push(current.trim());
       }
+
       current = "";
     } else if (parenthesesDepth === 0 && nextChars === " and ") {
       if (current.trim()) {
         result.push(current.trim());
       }
+
       current = "";
       i += 4;
     } else {
       current += char;
     }
+
     i++;
   }
 
@@ -56,6 +59,7 @@ export const extractMunicipalities = (
       .split(",")
       .map((m) => m.trim())
       .filter((m) => m.length > 0 && !/^\d+$/.test(m));
+
     municipalities.push(...munis);
   }
 
