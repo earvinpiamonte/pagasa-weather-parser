@@ -28,49 +28,95 @@ describe("parseTCB", () => {
     file.endsWith(".pdf"),
   );
 
-  describe("file path input", () => {
-    pdfFiles.forEach((file) => {
-      it(`should parse ${file} from file path and return a valid WindSignals object`, async () => {
-        const filePath = join(pdfDirectory, file);
-        const result = await parseTCB(filePath);
-        const validation = WindSignalSchema.safeParse(result);
+  pdfFiles.forEach((file) => {
+    describe(`for file: ${file}`, () => {
+      const testFilePath = join(pdfDirectory, file);
 
-        expect(validation.success).toBe(true);
+      describe("standard parsing (without chaining)", () => {
+        it("should parse from a file path and return a valid WindSignals object", async () => {
+          const result = await parseTCB(testFilePath);
+          const validation = WindSignalSchema.safeParse(result);
+
+          expect(validation.success).toBe(true);
+        });
+
+        it("should parse from a buffer and return a valid WindSignals object", async () => {
+          const buffer = readFileSync(testFilePath);
+          const result = await parseTCB(buffer);
+          const validation = WindSignalSchema.safeParse(result);
+
+          expect(validation.success).toBe(true);
+        });
       });
-    });
-  });
 
-  describe("buffer input", () => {
-    pdfFiles.forEach((file) => {
-      it(`should parse ${file} from buffer and return a valid WindSignals object`, async () => {
-        const filePath = join(pdfDirectory, file);
-        const buffer = readFileSync(filePath);
-        const result = await parseTCB(buffer);
-        const validation = WindSignalSchema.safeParse(result);
+      describe("chaining with .jsonStringified()", () => {
+        it("should parse from a file path and return a valid JSON string", async () => {
+          const jsonOutput = await parseTCB(testFilePath).jsonStringified();
 
-        expect(validation.success).toBe(true);
+          expect(typeof jsonOutput).toBe("string");
+
+          let parsed: unknown;
+
+          expect(() => {
+            parsed = JSON.parse(jsonOutput);
+          }).not.toThrow();
+
+          const validation = WindSignalSchema.safeParse(parsed);
+
+          expect(validation.success).toBe(true);
+        });
+
+        it("should parse from a buffer and return a valid JSON string", async () => {
+          const buffer = readFileSync(testFilePath);
+          const jsonOutput = await parseTCB(buffer).jsonStringified();
+
+          expect(typeof jsonOutput).toBe("string");
+
+          let parsed: unknown;
+
+          expect(() => {
+            parsed = JSON.parse(jsonOutput);
+          }).not.toThrow();
+
+          const validation = WindSignalSchema.safeParse(parsed);
+
+          expect(validation.success).toBe(true);
+        });
+
+        it("should allow custom spacing for the JSON output", async () => {
+          const jsonOutput = await parseTCB(testFilePath).jsonStringified(4);
+
+          expect(jsonOutput.split("\n")[1].startsWith("    ")).toBe(true);
+        });
       });
     });
   });
 
   describe("error handling", () => {
-    it("should throw an error for invalid input type", () => {
+    it("should throw a synchronous error for invalid input type", () => {
       expect(() => parseTCB(123 as any)).toThrow(
         "Invalid input: expected string (file path) or Buffer",
       );
     });
 
-    it("should throw an error for non-existent file", async () => {
+    it("should reject for a non-existent file", async () => {
       await expect(parseTCB("/non/existent/file.pdf")).rejects.toThrow(
         "Failed to parse PDF",
       );
     });
 
-    it("should throw an error for invalid buffer", async () => {
+    it("should reject for an invalid buffer", async () => {
       const invalidBuffer = Buffer.from("not a pdf");
+
       await expect(parseTCB(invalidBuffer)).rejects.toThrow(
         "Failed to parse PDF buffer",
       );
+    });
+
+    it("should reject the .jsonStringified() chain if the core promise fails", async () => {
+      await expect(
+        parseTCB("/non/existent/file.pdf").jsonStringified(),
+      ).rejects.toThrow("Failed to parse PDF");
     });
   });
 });

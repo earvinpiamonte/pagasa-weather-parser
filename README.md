@@ -12,7 +12,7 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 
 ### Basic Usage
 
-Example 1:
+File path example:
 
 ```javascript
 import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
@@ -21,13 +21,24 @@ const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
 console.log(result.signals);
 
-// To get formatted JSON output do:
+// Get formatted JSON string output
 const jsonOutput = JSON.stringify(result, null, 2);
 
 console.log(jsonOutput);
 ```
 
-Example 2:
+Chaining `.jsonStringified()` example:
+
+```javascript
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+
+const jsonOutput = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified();
+const customSpacingJson = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified(4); // with custom space
+
+console.log(jsonOutput);
+```
+
+Buffer example:
 
 ```javascript
 import { readFileSync } from "fs"
@@ -208,15 +219,18 @@ The parser returns a structured JSON object with the following stringified examp
 
 The package exports a single function that can handle both file paths and buffers:
 
-| Function | Parameters | Returns | Description |
-|----------|------------|---------|-------------|
-| `parseTCB(input: string \| Buffer)` | `input`: Either a file path (string) or PDF buffer (Buffer) | `Promise<WindSignals>` | Parses a PAGASA TCB PDF file from either a file path or buffer |
+| Function/Method | Parameters | Returns | Description |
+|-----------------|------------|---------|-------------|
+| `parseTCB(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. The returned promise is augmented with a `.jsonStringified()` method. |
+| `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
 ### Function Overloads
 
 ```typescript
-function parseTCB(filePath: string): Promise<WindSignals>;
-function parseTCB(buffer: Buffer): Promise<WindSignals>;
+import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
+
+function parseTCB(filePath: string): ParsedTCBPromise;
+function parseTCB(buffer: Buffer): ParsedTCBPromise;
 ```
 
 ## TypeScript Support
@@ -227,10 +241,13 @@ This package is written in TypeScript and includes type definitions.
 import { readFileSync } from "fs";
 import parseTCB, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
-// Parse from file path
+// Basic
 const result: WindSignals = await parseTCB('/path/to/file.pdf');
 
-// Parse from buffer
+// With JSON stringified
+const jsonResult: string = await parseTCB('/path/to/file.pdf').jsonStringified();
+
+// From buffer
 const buffer = readFileSync('/path/to/file.pdf');
 const bufferResult: WindSignals = await parseTCB(buffer);
 
