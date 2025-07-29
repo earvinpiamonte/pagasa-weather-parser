@@ -234,6 +234,41 @@ const signal1: Regions = result.signals['1'];
 const area: Area = signal1.regions.Luzon[0];
 ```
 
+## Testing
+
+This project uses [Jest](https://jestjs.io) for testing. The test suite validates that the parser correctly extracts wind signal data from PAGASA TCB PDF files and returns properly structured objects.
+
+### Prerequisites
+
+Make sure you have the development dependencies installed:
+
+```bash
+npm i
+```
+
+### Running Tests
+
+Run all tests:
+
+```bash
+npm test
+```
+
+### Test Structure
+
+The tests are located in the `tests/` directory and include the ff:
+
+- **Unit Tests**: `tests/pdf-parser.test.ts` - Tests the core PDF parsing functionality
+- **Test Data**: `tests/data/` - Contains sample PAGASA TCB PDF files for testing
+
+### Test Data
+
+The test suite includes several sample PAGASA TCB PDF files:
+- `TCB#15_emong.pdf`
+- `TCB#16_emong.pdf`
+- `TCB#17_emong.pdf`
+- `TCB#18_emong.pdf`
+
 ## Supported Formats
 
 Currently supports PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information.
