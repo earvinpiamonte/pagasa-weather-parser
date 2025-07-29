@@ -206,23 +206,10 @@ The parser returns a structured JSON object with the following stringified examp
 
 ## API
 
-### `tcbParser.parsePDF(filePath: string): Promise<WindSignals>`
-
-Parses a PAGASA TCB PDF file from a file path.
-
-**Parameters:**
-- `filePath` (string): Path to the PDF file
-
-**Returns:** Promise that resolves to a `WindSignals` object
-
-### `tcbParser.parseBuffer(buffer: Buffer): Promise<WindSignals>`
-
-Parses a PAGASA TCB PDF from a buffer.
-
-**Parameters:**
-- `buffer` (Buffer): PDF file buffer
-
-**Returns:** Promise that resolves to a `WindSignals` object
+| Method | Parameters | Returns | Description |
+|--------|------------|---------|-------------|
+| `tcbParser.parsePDF(filePath: string)` | `filePath` (string): Path to the PDF file | `Promise<WindSignals>` | Parses a PAGASA TCB PDF file from a file path |
+| `tcbParser.parseBuffer(buffer: Buffer)` | `buffer` (Buffer): PDF file buffer | `Promise<WindSignals>` | Parses a PAGASA TCB PDF from a buffer |
 
 ## TypeScript Support
 
