@@ -243,6 +243,10 @@ This project uses [Jest](https://jestjs.io) for testing. The test suite validate
 Make sure you have the development dependencies installed:
 
 ```bash
+cd pagasa-tcb-parser/
+```
+
+```bash
 npm i
 ```
 
