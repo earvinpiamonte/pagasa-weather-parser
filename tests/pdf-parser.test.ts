@@ -1,7 +1,7 @@
+import { readFileSync, readdirSync } from "fs";
 import { z } from "zod";
-import { parsePDF } from "../src/parsers/pdf-parser";
 import { join } from "path";
-import { readdirSync } from "fs";
+import parseTCB from "../src/index";
 
 const AreaSchema = z.object({
   name: z.string(),
@@ -22,22 +22,55 @@ const WindSignalSchema = z.object({
   ),
 });
 
-describe("pdf-parser", () => {
+describe("parseTCB", () => {
   const pdfDirectory = join(__dirname, "data");
   const pdfFiles = readdirSync(pdfDirectory).filter((file) =>
     file.endsWith(".pdf"),
   );
 
-  pdfFiles.forEach((file) => {
-    it(`should parse ${file} and return a valid WindSignals object`, async () => {
-      const filePath = join(pdfDirectory, file);
-      const result = await parsePDF(filePath);
+  describe("file path input", () => {
+    pdfFiles.forEach((file) => {
+      it(`should parse ${file} from file path and return a valid WindSignals object`, async () => {
+        const filePath = join(pdfDirectory, file);
+        const result = await parseTCB(filePath);
+        const validation = WindSignalSchema.safeParse(result);
 
-      console.log(JSON.stringify(result, null, 2));
+        expect(validation.success).toBe(true);
+      });
+    });
+  });
 
-      const validation = WindSignalSchema.safeParse(result);
+  describe("buffer input", () => {
+    pdfFiles.forEach((file) => {
+      it(`should parse ${file} from buffer and return a valid WindSignals object`, async () => {
+        const filePath = join(pdfDirectory, file);
+        const buffer = readFileSync(filePath);
+        const result = await parseTCB(buffer);
+        const validation = WindSignalSchema.safeParse(result);
 
-      expect(validation.success).toBe(true);
+        expect(validation.success).toBe(true);
+      });
+    });
+  });
+
+  describe("error handling", () => {
+    it("should throw an error for invalid input type", () => {
+      expect(() => parseTCB(123 as any)).toThrow(
+        "Invalid input: expected string (file path) or Buffer",
+      );
+    });
+
+    it("should throw an error for non-existent file", async () => {
+      await expect(parseTCB("/non/existent/file.pdf")).rejects.toThrow(
+        "Failed to parse PDF",
+      );
+    });
+
+    it("should throw an error for invalid buffer", async () => {
+      const invalidBuffer = Buffer.from("not a pdf");
+      await expect(parseTCB(invalidBuffer)).rejects.toThrow(
+        "Failed to parse PDF buffer",
+      );
     });
   });
 });

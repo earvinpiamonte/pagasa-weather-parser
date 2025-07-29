@@ -15,9 +15,9 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 Example 1:
 
 ```javascript
-import tcbParser from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
-const result = await tcbParser.parsePDF('/path/to/TCB#16_emong.pdf');
+const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
 console.log(result.signals);
 
@@ -31,10 +31,10 @@ Example 2:
 
 ```javascript
 import { readFileSync } from "fs"
-import tcbParser from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
 const buffer = readFileSync('/path/to/TCB#16_emong.pdf');
-const result = await tcbParser.parseBuffer(buffer);
+const result = await parseTCB(buffer);
 
 console.log(result.signals);
 ```
@@ -206,19 +206,33 @@ The parser returns a structured JSON object with the following stringified examp
 
 ## API
 
-| Method | Parameters | Returns | Description |
-|--------|------------|---------|-------------|
-| `tcbParser.parsePDF(filePath: string)` | `filePath` (string): Path to the PDF file | `Promise<WindSignals>` | Parses a PAGASA TCB PDF file from a file path |
-| `tcbParser.parseBuffer(buffer: Buffer)` | `buffer` (Buffer): PDF file buffer | `Promise<WindSignals>` | Parses a PAGASA TCB PDF from a buffer |
+The package exports a single function that can handle both file paths and buffers:
+
+| Function | Parameters | Returns | Description |
+|----------|------------|---------|-------------|
+| `parseTCB(input: string \| Buffer)` | `input`: Either a file path (string) or PDF buffer (Buffer) | `Promise<WindSignals>` | Parses a PAGASA TCB PDF file from either a file path or buffer |
+
+### Function Overloads
+
+```typescript
+function parseTCB(filePath: string): Promise<WindSignals>;
+function parseTCB(buffer: Buffer): Promise<WindSignals>;
+```
 
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import tcbParser, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
+import { readFileSync } from "fs";
+import parseTCB, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
-const result: WindSignals = await tcbParser.parsePDF('/path/to/file.pdf');
+// Parse from file path
+const result: WindSignals = await parseTCB('/path/to/file.pdf');
+
+// Parse from buffer
+const buffer = readFileSync('/path/to/file.pdf');
+const bufferResult: WindSignals = await parseTCB(buffer);
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
