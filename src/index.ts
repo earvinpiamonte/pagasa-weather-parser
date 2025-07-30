@@ -1,14 +1,37 @@
-import { parsePDF, parseBuffer } from "./parsers/pdf-parser";
+import { promises as fs } from "fs";
+import { parsePdfFromBuffer } from "./parsers/pdf-parser";
 import { WindSignals, Regions, Area } from "./types/index";
 
-const tcbParser = {
-  parsePDF: async (filePath: string): Promise<WindSignals> =>
-    parsePDF(filePath),
+export interface ParsedTCBPromise extends Promise<WindSignals> {
+  jsonStringified(space?: number | string): Promise<string>;
+}
 
-  parseBuffer: async (buffer: Buffer): Promise<WindSignals> =>
-    parseBuffer(buffer),
-};
+function parseTCB(filePath: string): ParsedTCBPromise;
 
-export default tcbParser;
+function parseTCB(buffer: Buffer): ParsedTCBPromise;
+
+function parseTCB(input: string | Buffer): ParsedTCBPromise {
+  if (typeof input !== "string" && !Buffer.isBuffer(input)) {
+    throw new Error("Invalid input: expected string (file path) or Buffer");
+  }
+
+  const corePromise = (async (): Promise<WindSignals> => {
+    const buffer = typeof input === "string" ? await fs.readFile(input) : input;
+
+    return await parsePdfFromBuffer(buffer);
+  })();
+
+  const result = corePromise as ParsedTCBPromise;
+
+  result.jsonStringified = async (space: number | string = 2) => {
+    const data = await corePromise;
+
+    return JSON.stringify(data, null, space);
+  };
+
+  return result;
+}
+
+export default parseTCB;
 
 export { WindSignals, Regions, Area };

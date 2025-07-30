@@ -10,41 +10,80 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 
 ## Usage
 
-### Basic Usage
-
-Example 1:
+### Basic
 
 ```javascript
-import tcbParser from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
-const result = await tcbParser.parsePDF('/path/to/TCB#16_emong.pdf');
+const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
-console.log(result.signals);
-
-// To get formatted JSON output do:
-const jsonOutput = JSON.stringify(result, null, 2);
-
-console.log(jsonOutput);
+console.log(result);
 ```
 
-Example 2:
+### Error Handling
+
+#### Using async/ await
 
 ```javascript
-import { readFileSync } from "fs"
-import tcbParser from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
-const buffer = readFileSync('/path/to/TCB#16_emong.pdf');
-const result = await tcbParser.parseBuffer(buffer);
+const run = async () => {
+  try {
+    const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
-console.log(result.signals);
+    console.log(result);
+  } catch (error) {
+    console.error("Failed to parse TCB:", error.message);
+  }
+};
+
+run();
 ```
+
+#### Using Promises with `.then().catch()`
+
+```javascript
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+
+parseTCB('/path/to/TCB#16_emong.pdf')
+  .then(result => {
+    console.log(result);
+  })
+  .catch(error => {
+    console.error("Failed to parse TCB:", error.message);
+  });
+```
+
+#### Example fetching and parsing from external source
+
+```javascript
+import express from 'express';
+import parseTCB from '@earvinpiamonte/pagasa-tcb-parser';
+
+const app = express();
+
+app.get('/your/api/get-tcb', async (req, res) => {
+  try {
+    const response = await fetch('https://pubfiles.pagasa.dost.gov.ph/tamss/weather/bulletin/TCB%2316_emong.pdf');
+    const buffer = await response.buffer();
+    const result = await parseTCB(buffer);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to parse TCB' });
+  }
+});
+```
+
+> [!NOTE]
+> `parseTCB` both supports file path and buffer input.
 
 ### Example output
 
-The parser returns a structured JSON object with the following stringified example output:
+The parser returns a structured JavaScript object:
 
 <details>
-<summary>Click to expand JSON output</summary>
+<summary>Toggle example code</summary>
 
 ```json
 {
@@ -206,19 +245,34 @@ The parser returns a structured JSON object with the following stringified examp
 
 ## API
 
-| Method | Parameters | Returns | Description |
-|--------|------------|---------|-------------|
-| `tcbParser.parsePDF(filePath: string)` | `filePath` (string): Path to the PDF file | `Promise<WindSignals>` | Parses a PAGASA TCB PDF file from a file path |
-| `tcbParser.parseBuffer(buffer: Buffer)` | `buffer` (Buffer): PDF file buffer | `Promise<WindSignals>` | Parses a PAGASA TCB PDF from a buffer |
+The package exports a single function that can handle both file paths and buffers:
+
+| Function/Method | Parameters | Returns | Description |
+|-----------------|------------|---------|-------------|
+| `parseTCB(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
+| `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
+
+### Function Overloads
+
+```typescript
+import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
+
+function parseTCB(filePath: string): ParsedTCBPromise;
+function parseTCB(buffer: Buffer): ParsedTCBPromise;
+```
 
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import tcbParser, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
+import parseTCB, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
-const result: WindSignals = await tcbParser.parsePDF('/path/to/file.pdf');
+// Parse from file path
+const result: WindSignals = await parseTCB('/path/to/file.pdf');
+
+// With JSON stringified
+const jsonResult: string = await parseTCB('/path/to/file.pdf').jsonStringified();
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
@@ -227,11 +281,11 @@ const area: Area = signal1.regions.Luzon[0];
 
 ## Testing
 
-This project uses [Jest](https://jestjs.io) for testing. The test suite validates that the parser correctly extracts wind signal data from PAGASA TCB PDF files and returns properly structured objects.
+This project uses [Jest](https://jestjs.io) for testing.
 
 ### Prerequisites
 
-Make sure you have the development dependencies installed:
+Make sure you have the dependencies installed:
 
 ```bash
 cd pagasa-tcb-parser/
@@ -242,8 +296,6 @@ npm i
 ```
 
 ### Running Tests
-
-Run all tests:
 
 ```bash
 npm test
@@ -266,7 +318,7 @@ The test suite includes several sample PAGASA TCB PDF files:
 
 ## Supported Formats
 
-Currently supports PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information.
+Currently, PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information are supported by this package.
 
 ## Maintainer
 
