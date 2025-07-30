@@ -19,17 +19,7 @@ import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
 const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
-console.log(result.signals);
-```
-
-Using `.jsonStringified()`:
-
-```javascript
-import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
-
-const jsonOutput = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified(); // with custom space use `.jsonStringified(4)`
-
-console.log(jsonOutput);
+console.log(result);
 ```
 
 Data buffer example:
@@ -46,12 +36,12 @@ console.log(result.signals);
 
 ### Example output
 
-The parser returns a structured JSON object with the following stringified example output:
+The parser returns a structured JavaScript object:
 
 <details>
-<summary>Click to expand JSON output</summary>
+<summary>Toggle example code</summary>
 
-```json
+```javascript
 {
   "signals": {
     "1": {
