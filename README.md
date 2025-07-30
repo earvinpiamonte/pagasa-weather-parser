@@ -20,25 +20,19 @@ import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 
 console.log(result.signals);
-
-// Get formatted JSON string output
-const jsonOutput = JSON.stringify(result, null, 2);
-
-console.log(jsonOutput);
 ```
 
-Chaining `.jsonStringified()` example:
+Using `.jsonStringified()`:
 
 ```javascript
 import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
 
-const jsonOutput = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified();
-const customSpacingJson = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified(4); // with custom space
+const jsonOutput = await parseTCB('/path/to/TCB#16_emong.pdf').jsonStringified(); // with custom space use `.jsonStringified(4)`
 
 console.log(jsonOutput);
 ```
 
-Buffer example:
+Data buffer example:
 
 ```javascript
 import { readFileSync } from "fs"
@@ -258,11 +252,11 @@ const area: Area = signal1.regions.Luzon[0];
 
 ## Testing
 
-This project uses [Jest](https://jestjs.io) for testing. The test suite validates that the parser correctly extracts wind signal data from PAGASA TCB PDF files and returns properly structured objects.
+This project uses [Jest](https://jestjs.io) for testing.
 
 ### Prerequisites
 
-Make sure you have the development dependencies installed:
+Make sure you have the dependencies installed:
 
 ```bash
 cd pagasa-tcb-parser/
@@ -273,8 +267,6 @@ npm i
 ```
 
 ### Running Tests
-
-Run all tests:
 
 ```bash
 npm test
@@ -297,7 +289,7 @@ The test suite includes several sample PAGASA TCB PDF files:
 
 ## Supported Formats
 
-Currently supports PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information.
+Currently, PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information are supported by this package.
 
 ## Maintainer
 
