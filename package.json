@@ -23,6 +23,13 @@
   ],
   "author": "Noel Earvin Piamonte",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/earvinpiamonte/pagasa-tcb-parser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/earvinpiamonte/pagasa-tcb-parser/issues"
+  },
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
