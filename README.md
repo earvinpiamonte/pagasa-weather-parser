@@ -1,5 +1,11 @@
 # `pagasa-tcb-parser`
 
+<p align="center">
+  <a href="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/ci.yml">
+    <img src="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/ci.yml/badge.svg" alt="Tests">
+  </a>
+</p>
+
 A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) PDF files.
 
 ## Installation
