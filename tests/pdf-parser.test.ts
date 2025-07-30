@@ -101,7 +101,7 @@ describe("parseTCB", () => {
 
     it("should reject for a non-existent file", async () => {
       await expect(parseTCB("/non/existent/file.pdf")).rejects.toThrow(
-        "Failed to parse PDF",
+        "Failed to parse PDF from buffer. Reason: Error: ENOENT: no such file or directory",
       );
     });
 
@@ -109,14 +109,16 @@ describe("parseTCB", () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
       await expect(parseTCB(invalidBuffer)).rejects.toThrow(
-        "Failed to parse PDF buffer",
+        "Failed to parse PDF from buffer. Reason: Invalid PDF structure",
       );
     });
 
     it("should reject the .jsonStringified() chain if the core promise fails", async () => {
       await expect(
         parseTCB("/non/existent/file.pdf").jsonStringified(),
-      ).rejects.toThrow("Failed to parse PDF");
+      ).rejects.toThrow(
+        "Failed to parse PDF from buffer. Reason: Error: ENOENT: no such file or directory",
+      );
     });
   });
 });

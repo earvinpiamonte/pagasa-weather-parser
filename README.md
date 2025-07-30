@@ -10,8 +10,6 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 
 ## Usage
 
-### Basic Usage
-
 File path example:
 
 ```javascript
@@ -22,21 +20,33 @@ const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 console.log(result);
 ```
 
-Data buffer example:
+Example with Express.js using buffer input:
 
 ```javascript
-import { readFileSync } from "fs"
-import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+import express from 'express';
+import parseTCB from '@earvinpiamonte/pagasa-tcb-parser';
 
-const buffer = readFileSync('/path/to/TCB#16_emong.pdf');
-const result = await parseTCB(buffer);
+const app = express();
 
-console.log(result.signals);
+app.get('/your/api/get-tcb', async (req, res) => {
+  try {
+    const response = await fetch('https://pubfiles.pagasa.dost.gov.ph/tamss/weather/bulletin/TCB%2316_emong.pdf');
+    const buffer = await response.buffer();
+    const result = await parseTCB(buffer);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to parse TCB' });
+  }
+});
 ```
+
+> [!TIP]
+> `parseTCB` both supports file path and buffer input.
 
 ### Example output
 
-The parser returns a structured JavaScript object:
+The parser returns a structured object:
 
 <details>
 <summary>Toggle example code</summary>
