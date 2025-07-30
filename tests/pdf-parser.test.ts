@@ -55,15 +55,13 @@ describe("parseTCB", () => {
 
           expect(typeof jsonOutput).toBe("string");
 
-          let parsed: unknown;
-
           expect(() => {
-            parsed = JSON.parse(jsonOutput);
+            const parsed = JSON.parse(jsonOutput);
+
+            const validation = WindSignalSchema.safeParse(parsed);
+
+            expect(validation.success).toBe(true);
           }).not.toThrow();
-
-          const validation = WindSignalSchema.safeParse(parsed);
-
-          expect(validation.success).toBe(true);
         });
 
         it("should parse from a buffer and return a valid JSON string", async () => {
@@ -72,15 +70,13 @@ describe("parseTCB", () => {
 
           expect(typeof jsonOutput).toBe("string");
 
-          let parsed: unknown;
-
           expect(() => {
-            parsed = JSON.parse(jsonOutput);
+            const parsed = JSON.parse(jsonOutput);
+
+            const validation = WindSignalSchema.safeParse(parsed);
+
+            expect(validation.success).toBe(true);
           }).not.toThrow();
-
-          const validation = WindSignalSchema.safeParse(parsed);
-
-          expect(validation.success).toBe(true);
         });
 
         it("should allow custom spacing for the JSON output", async () => {
@@ -101,7 +97,7 @@ describe("parseTCB", () => {
 
     it("should reject for a non-existent file", async () => {
       await expect(parseTCB("/non/existent/file.pdf")).rejects.toThrow(
-        "Failed to parse PDF from buffer. Reason: Error: ENOENT: no such file or directory",
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
 
@@ -109,7 +105,7 @@ describe("parseTCB", () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
       await expect(parseTCB(invalidBuffer)).rejects.toThrow(
-        "Failed to parse PDF from buffer. Reason: Invalid PDF structure",
+        "Invalid PDF structure",
       );
     });
 
@@ -117,7 +113,7 @@ describe("parseTCB", () => {
       await expect(
         parseTCB("/non/existent/file.pdf").jsonStringified(),
       ).rejects.toThrow(
-        "Failed to parse PDF from buffer. Reason: Error: ENOENT: no such file or directory",
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
   });

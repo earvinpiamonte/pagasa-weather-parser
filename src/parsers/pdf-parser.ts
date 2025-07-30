@@ -5,7 +5,13 @@ import { extractSignals } from "./signal-parser";
 export const parsePdfFromBuffer = async (
   buffer: Buffer,
 ): Promise<WindSignals> => {
-  const data = await pdf(buffer);
+  try {
+    const data = await pdf(buffer);
 
-  return extractSignals(data.text);
+    return extractSignals(data.text);
+  } catch (error) {
+    throw new Error(
+      `Failed to parse PDF buffer: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
 };

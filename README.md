@@ -10,7 +10,7 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 
 ## Usage
 
-File path example:
+### Basic
 
 ```javascript
 import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
@@ -20,7 +20,41 @@ const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 console.log(result);
 ```
 
-Example fetching and parsing from external source:
+### Error Handling
+
+#### Using async/ await
+
+```javascript
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+
+const run = async () => {
+  try {
+    const result = await parseTCB('/path/to/TCB#16_emong.pdf');
+
+    console.log(result);
+  } catch (error) {
+    console.error("Failed to parse TCB:", error.message);
+  }
+};
+
+run();
+```
+
+#### Using Promises with `.then().catch()`
+
+```javascript
+import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+
+parseTCB('/path/to/TCB#16_emong.pdf')
+  .then(result => {
+    console.log(result);
+  })
+  .catch(error => {
+    console.error("Failed to parse TCB:", error.message);
+  });
+```
+
+#### Example fetching and parsing from external source
 
 ```javascript
 import express from 'express';
@@ -41,7 +75,7 @@ app.get('/your/api/get-tcb', async (req, res) => {
 });
 ```
 
-> [!TIP]
+> [!INFO]
 > `parseTCB` both supports file path and buffer input.
 
 ### Example output

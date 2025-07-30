@@ -16,19 +16,11 @@ function parseTCB(input: string | Buffer): ParsedTCBPromise {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
 
-  const corePromise = new Promise<WindSignals>(async (resolve, reject) => {
-    try {
-      const buffer =
-        typeof input === "string" ? await fs.readFile(input) : input;
-      const result = await parsePdfFromBuffer(buffer);
+  const corePromise = (async (): Promise<WindSignals> => {
+    const buffer = typeof input === "string" ? await fs.readFile(input) : input;
 
-      resolve(result);
-    } catch (error) {
-      const reason = error instanceof Error ? error.message : String(error);
-
-      reject(new Error(`Failed to parse PDF from buffer. Reason: ${reason}`));
-    }
-  });
+    return await parsePdfFromBuffer(buffer);
+  })();
 
   const result = corePromise as ParsedTCBPromise;
 
