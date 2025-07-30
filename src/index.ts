@@ -1,5 +1,4 @@
 import { promises as fs } from "fs";
-import { Buffer } from "buffer";
 import { parsePdfFromBuffer } from "./parsers/pdf-parser";
 import { WindSignals, Regions, Area } from "./types/index";
 
