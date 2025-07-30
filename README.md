@@ -75,7 +75,7 @@ app.get('/your/api/get-tcb', async (req, res) => {
 });
 ```
 
-> [!INFO]
+> [!NOTE]
 > `parseTCB` both supports file path and buffer input.
 
 ### Example output
