@@ -81,11 +81,13 @@ describe("parseTCB", () => {
 
         it("should allow custom spacing for the JSON output", async () => {
           const jsonOutput = await parseTCB(testFilePath).jsonStringified(4);
-
           const lines = jsonOutput.split("\n");
-          expect(() => JSON.parse(jsonOutput)).not.toThrow(); // Ensure valid JSON
-          expect(lines.length).toBeGreaterThan(1); // Ensure multiline output
-          expect(lines[1].match(/^\s+/)?.[0]?.length).toBe(4); // Check indentation level
+
+          expect(() => JSON.parse(jsonOutput)).not.toThrow();
+
+          expect(lines.length).toBeGreaterThan(1);
+
+          expect(lines[1].match(/^\s+/)?.[0]?.length).toBe(4);
         });
       });
     });
