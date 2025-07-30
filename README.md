@@ -41,7 +41,7 @@ The parser returns a structured JavaScript object:
 <details>
 <summary>Toggle example code</summary>
 
-```javascript
+```json
 {
   "signals": {
     "1": {
