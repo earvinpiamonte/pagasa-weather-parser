@@ -20,7 +20,7 @@ const result = await parseTCB('/path/to/TCB#16_emong.pdf');
 console.log(result);
 ```
 
-Example with Express.js using buffer input:
+Example fetching and parsing from external source:
 
 ```javascript
 import express from 'express';
@@ -46,7 +46,7 @@ app.get('/your/api/get-tcb', async (req, res) => {
 
 ### Example output
 
-The parser returns a structured object:
+The parser returns a structured JavaScript object:
 
 <details>
 <summary>Toggle example code</summary>
@@ -215,7 +215,7 @@ The package exports a single function that can handle both file paths and buffer
 
 | Function/Method | Parameters | Returns | Description |
 |-----------------|------------|---------|-------------|
-| `parseTCB(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. The returned promise is augmented with a `.jsonStringified()` method. |
+| `parseTCB(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
 ### Function Overloads
@@ -232,18 +232,13 @@ function parseTCB(buffer: Buffer): ParsedTCBPromise;
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import { readFileSync } from "fs";
 import parseTCB, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
-// Basic
+// Parse from file path
 const result: WindSignals = await parseTCB('/path/to/file.pdf');
 
 // With JSON stringified
 const jsonResult: string = await parseTCB('/path/to/file.pdf').jsonStringified();
-
-// From buffer
-const buffer = readFileSync('/path/to/file.pdf');
-const bufferResult: WindSignals = await parseTCB(buffer);
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
