@@ -1,8 +1,8 @@
 # `pagasa-tcb-parser`
 
 <p align="center">
-  <a href="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/ci.yml">
-    <img src="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/ci.yml/badge.svg" alt="Tests">
+  <a href="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml">
+    <img src="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml/badge.svg" alt="Tests">
   </a>
 </p>
 
