@@ -273,8 +273,6 @@ import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
 declare function parseTcbPdf(input: string | Buffer): ParsedTCBPromise;
 ```
 
----
-
 ## Development
 
 ### TypeScript Support
@@ -340,8 +338,6 @@ The test suite includes several sample PAGASA TCB PDF files:
 ### Supported Formats
 
 Currently, PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information are supported by this package.
-
----
 
 ## Maintainer
 
