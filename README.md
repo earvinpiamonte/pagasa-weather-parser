@@ -1,13 +1,7 @@
 # `pagasa-tcb-parser`
 
-<p align="center">
-    <a href="https://www.npmjs.com/package/@earvinpiamonte/pagasa-tcb-parser">
-        <img src="https://img.shields.io/npm/v/@earvinpiamonte/pagasa-tcb-parser.svg" alt="npm version">
-    </a>
-    <a href="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml">
-        <img src="https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml/badge.svg" alt="Tests">
-    </a>
-</p>
+[![npm version](https://img.shields.io/npm/v/@earvinpiamonte/pagasa-tcb-parser.svg)](https://www.npmjs.com/package/@earvinpiamonte/pagasa-tcb-parser)
+[![Tests](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml)
 
 A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) PDF files.
 
