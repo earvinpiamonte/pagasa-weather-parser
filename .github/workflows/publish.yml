@@ -27,16 +27,6 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Configure npm for GitHub Packages
-        run: npm config set //npm.pkg.github.com/:_authToken="${GITHUB_TOKEN}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Publish to GitHub Packages
-        run: npm publish --registry=https://npm.pkg.github.com/
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Publish to npm
         run: npm publish --access public
         env:
