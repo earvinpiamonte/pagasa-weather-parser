@@ -261,27 +261,32 @@ The package exports a single function that can handle both file paths and buffer
 | `parseTcbPdf(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
-### Function Overloads
+### Function Signature
 
 ```typescript
 import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
 
-function parseTcbPdf(filePath: string): ParsedTCBPromise;
-function parseTcbPdf(buffer: Buffer): ParsedTCBPromise;
+/**
+ * Parses a PAGASA TCB PDF from a file path or Buffer.
+ * Returns a ParsedTCBPromise: a Promise<WindSignals>.
+ */
+declare function parseTcbPdf(input: string | Buffer): ParsedTCBPromise;
 ```
 
 ## TypeScript Support
 
 This package is written in TypeScript and includes type definitions.
 
+> **Note:** The package exports the `ParsedTCBPromise` type for advanced typing, which extends `Promise<WindSignals>` with a `.jsonStringified()` method.
+
 ```typescript
-import parseTcbPdf, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
+import parseTcbPdf, { ParsedTCBPromise, WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
 // Parse from file path
-const result: WindSignals = await parseTcbPdf('/path/to/file.pdf');
+const result: ParsedTCBPromise = await parseTcbPdf('/path/to/file.pdf');
 
 // With JSON stringified
-const jsonResult: string = await parseTcbPdf('/path/to/file.pdf').jsonStringified();
+const jsonResult: string = await result.jsonStringified();
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];

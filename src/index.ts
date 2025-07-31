@@ -6,11 +6,7 @@ export interface ParsedTCBPromise extends Promise<WindSignals> {
   jsonStringified(space?: number | string): Promise<string>;
 }
 
-function parseTcbPdf(filePath: string): ParsedTCBPromise;
-
-function parseTcbPdf(buffer: Buffer): ParsedTCBPromise;
-
-function parseTcbPdf(input: string | Buffer): ParsedTCBPromise {
+const parseTcbPdf = (input: string | Buffer): ParsedTCBPromise => {
   if (typeof input !== "string" && !Buffer.isBuffer(input)) {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
@@ -30,7 +26,7 @@ function parseTcbPdf(input: string | Buffer): ParsedTCBPromise {
   };
 
   return result;
-}
+};
 
 export default parseTcbPdf;
 

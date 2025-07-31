@@ -8,6 +8,7 @@ declare module "pdf-parse" {
     version: string;
   }
 
-  function pdf(dataBuffer: Buffer, options?: any): Promise<PDFData>;
+  declare const pdf: (dataBuffer: Buffer, options?: any) => Promise<PDFData>;
+
   export = pdf;
 }
