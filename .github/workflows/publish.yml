@@ -28,7 +28,7 @@ jobs:
         run: npm run build
 
       - name: Configure npm for GitHub Packages
-        run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" >> ~/.npmrc
+        run: npm config set //npm.pkg.github.com/:_authToken="${GITHUB_TOKEN}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
