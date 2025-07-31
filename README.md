@@ -252,7 +252,7 @@ The parser returns a structured JavaScript object:
 
 </details>
 
-## API
+### API
 
 The package exports a single function that can handle both file paths and buffers:
 
@@ -261,7 +261,7 @@ The package exports a single function that can handle both file paths and buffer
 | `parseTcbPdf(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
-### Function Signature
+#### Function Signature
 
 ```typescript
 import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
@@ -273,7 +273,11 @@ import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
 declare function parseTcbPdf(input: string | Buffer): ParsedTCBPromise;
 ```
 
-## TypeScript Support
+---
+
+## Development
+
+### TypeScript Support
 
 This package is written in TypeScript and includes type definitions.
 
@@ -296,11 +300,11 @@ const signal1: Regions = result.signals['1'];
 const area: Area = signal1.regions.luzon[0];
 ```
 
-## Testing
+### Testing
 
 This project uses [Jest](https://jestjs.io) for testing.
 
-### Prerequisites
+#### Prerequisites
 
 Make sure you have the dependencies installed:
 
@@ -312,20 +316,20 @@ cd pagasa-tcb-parser/
 npm i
 ```
 
-### Running Tests
+#### Running Tests
 
 ```bash
 npm test
 ```
 
-### Test Structure
+#### Test Structure
 
 The tests are located in the `tests/` directory and include the ff:
 
 - **Unit Tests**: `tests/pdf-parser.test.ts` - Tests the core PDF parsing functionality
 - **Test Data**: `tests/data/` - Contains sample PAGASA TCB PDF files for testing
 
-### Test Data
+#### Test Data
 
 The test suite includes several sample PAGASA TCB PDF files:
 - `TCB#15_emong.pdf`
@@ -333,9 +337,11 @@ The test suite includes several sample PAGASA TCB PDF files:
 - `TCB#17_emong.pdf`
 - `TCB#18_emong.pdf`
 
-## Supported Formats
+### Supported Formats
 
 Currently, PAGASA Tropical Cyclone Bulletin PDF files that contain TCWS (Tropical Cyclone Wind Signals) information are supported by this package.
+
+---
 
 ## Maintainer
 
