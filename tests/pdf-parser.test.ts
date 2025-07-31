@@ -14,9 +14,9 @@ const WindSignalSchema = z.object({
     z.string(),
     z.object({
       regions: z.object({
-        Luzon: z.array(AreaSchema),
-        Visayas: z.array(AreaSchema),
-        Mindanao: z.array(AreaSchema),
+        luzon: z.array(AreaSchema),
+        visayas: z.array(AreaSchema),
+        mindanao: z.array(AreaSchema),
       }),
     }),
   ),

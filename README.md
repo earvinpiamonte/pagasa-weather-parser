@@ -99,7 +99,7 @@ The parser returns a structured JavaScript object:
   "signals": {
     "1": {
       "regions": {
-        "Luzon": [
+        "luzon": [
           {
             "name": "Ilocos Norte",
             "parts": [
@@ -185,13 +185,13 @@ The parser returns a structured JavaScript object:
             ]
           }
         ],
-        "Visayas": [],
-        "Mindanao": []
+        "visayas": [],
+        "mindanao": []
       }
     },
     "2": {
       "regions": {
-        "Luzon": [
+        "luzon": [
           {
             "name": "Ilocos Norte",
             "parts": [
@@ -242,8 +242,8 @@ The parser returns a structured JavaScript object:
             ]
           }
         ],
-        "Visayas": [],
-        "Mindanao": []
+        "visayas": [],
+        "mindanao": []
       }
     }
   }
@@ -290,7 +290,7 @@ const jsonResult: string = await result.jsonStringified();
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
-const area: Area = signal1.regions.Luzon[0];
+const area: Area = signal1.regions.luzon[0];
 ```
 
 ## Testing

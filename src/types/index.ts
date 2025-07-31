@@ -6,9 +6,9 @@ export interface Area {
 
 export interface Regions {
   regions: {
-    Luzon: Area[];
-    Visayas: Area[];
-    Mindanao: Area[];
+    luzon: Area[];
+    visayas: Area[];
+    mindanao: Area[];
   };
 }
 
