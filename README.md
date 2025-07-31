@@ -288,6 +288,9 @@ const result: ParsedTCBPromise = await parseTcbPdf('/path/to/file.pdf');
 // With JSON stringified
 const jsonResult: string = await result.jsonStringified();
 
+// Using `WindSignals` type directly:
+const windSignals: WindSignals = await result;
+
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];
 const area: Area = signal1.regions.luzon[0];
