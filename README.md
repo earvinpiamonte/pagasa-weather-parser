@@ -22,9 +22,9 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 ### Basic
 
 ```javascript
-import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser"
 
-const result = await parseTCB('/path/to/TCB#16_emong.pdf');
+const result = await parseTcbPdf('/path/to/TCB#16_emong.pdf');
 
 console.log(result);
 ```
@@ -34,11 +34,11 @@ console.log(result);
 #### Using async/ await
 
 ```javascript
-import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser"
 
 const run = async () => {
   try {
-    const result = await parseTCB('/path/to/TCB#16_emong.pdf');
+    const result = await parseTcbPdf('/path/to/TCB#16_emong.pdf');
 
     console.log(result);
   } catch (error) {
@@ -52,9 +52,9 @@ run();
 #### Using Promises with `.then().catch()`
 
 ```javascript
-import parseTCB from "@earvinpiamonte/pagasa-tcb-parser"
+import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser"
 
-parseTCB('/path/to/TCB#16_emong.pdf')
+parseTcbPdf('/path/to/TCB#16_emong.pdf')
   .then(result => {
     console.log(result);
   })
@@ -67,7 +67,7 @@ parseTCB('/path/to/TCB#16_emong.pdf')
 
 ```javascript
 import express from 'express';
-import parseTCB from '@earvinpiamonte/pagasa-tcb-parser';
+import parseTcbPdf from '@earvinpiamonte/pagasa-tcb-parser';
 
 const app = express();
 
@@ -75,7 +75,7 @@ app.get('/your/api/get-tcb', async (req, res) => {
   try {
     const response = await fetch('https://pubfiles.pagasa.dost.gov.ph/tamss/weather/bulletin/TCB%2316_emong.pdf');
     const buffer = await response.buffer();
-    const result = await parseTCB(buffer);
+    const result = await parseTcbPdf(buffer);
 
     res.json(result);
   } catch (error) {
@@ -85,7 +85,7 @@ app.get('/your/api/get-tcb', async (req, res) => {
 ```
 
 > [!NOTE]
-> `parseTCB` both supports file path and buffer input.
+> `parseTcbPdf` both supports file path and buffer input.
 
 ### Example output
 
@@ -258,7 +258,7 @@ The package exports a single function that can handle both file paths and buffer
 
 | Function/Method | Parameters | Returns | Description |
 |-----------------|------------|---------|-------------|
-| `parseTCB(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
+| `parseTcbPdf(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
 ### Function Overloads
@@ -266,8 +266,8 @@ The package exports a single function that can handle both file paths and buffer
 ```typescript
 import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
 
-function parseTCB(filePath: string): ParsedTCBPromise;
-function parseTCB(buffer: Buffer): ParsedTCBPromise;
+function parseTcbPdf(filePath: string): ParsedTCBPromise;
+function parseTcbPdf(buffer: Buffer): ParsedTCBPromise;
 ```
 
 ## TypeScript Support
@@ -275,13 +275,13 @@ function parseTCB(buffer: Buffer): ParsedTCBPromise;
 This package is written in TypeScript and includes type definitions.
 
 ```typescript
-import parseTCB, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
+import parseTcbPdf, { WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
 // Parse from file path
-const result: WindSignals = await parseTCB('/path/to/file.pdf');
+const result: WindSignals = await parseTcbPdf('/path/to/file.pdf');
 
 // With JSON stringified
-const jsonResult: string = await parseTCB('/path/to/file.pdf').jsonStringified();
+const jsonResult: string = await parseTcbPdf('/path/to/file.pdf').jsonStringified();
 
 // You can also type individual parts:
 const signal1: Regions = result.signals['1'];

@@ -6,11 +6,11 @@ export interface ParsedTCBPromise extends Promise<WindSignals> {
   jsonStringified(space?: number | string): Promise<string>;
 }
 
-function parseTCB(filePath: string): ParsedTCBPromise;
+function parseTcbPdf(filePath: string): ParsedTCBPromise;
 
-function parseTCB(buffer: Buffer): ParsedTCBPromise;
+function parseTcbPdf(buffer: Buffer): ParsedTCBPromise;
 
-function parseTCB(input: string | Buffer): ParsedTCBPromise {
+function parseTcbPdf(input: string | Buffer): ParsedTCBPromise {
   if (typeof input !== "string" && !Buffer.isBuffer(input)) {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
@@ -32,6 +32,6 @@ function parseTCB(input: string | Buffer): ParsedTCBPromise {
   return result;
 }
 
-export default parseTCB;
+export default parseTcbPdf;
 
 export { WindSignals, Regions, Area };
