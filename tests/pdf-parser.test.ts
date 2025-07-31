@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "fs";
 import { z } from "zod";
 import { join } from "path";
-import parseTCB from "../src/index";
+import parseTcbPdf from "../src/index";
 
 const AreaSchema = z.object({
   name: z.string(),
@@ -14,15 +14,15 @@ const WindSignalSchema = z.object({
     z.string(),
     z.object({
       regions: z.object({
-        Luzon: z.array(AreaSchema),
-        Visayas: z.array(AreaSchema),
-        Mindanao: z.array(AreaSchema),
+        luzon: z.array(AreaSchema),
+        visayas: z.array(AreaSchema),
+        mindanao: z.array(AreaSchema),
       }),
     }),
   ),
 });
 
-describe("parseTCB", () => {
+describe("parseTcb", () => {
   const pdfDirectory = join(__dirname, "data");
   const pdfFiles = readdirSync(pdfDirectory).filter((file) =>
     file.endsWith(".pdf"),
@@ -34,7 +34,7 @@ describe("parseTCB", () => {
 
       describe("standard parsing (without chaining)", () => {
         it("should parse from a file path and return a valid WindSignals object", async () => {
-          const result = await parseTCB(testFilePath);
+          const result = await parseTcbPdf(testFilePath);
           const validation = WindSignalSchema.safeParse(result);
 
           expect(validation.success).toBe(true);
@@ -42,7 +42,7 @@ describe("parseTCB", () => {
 
         it("should parse from a buffer and return a valid WindSignals object", async () => {
           const buffer = readFileSync(testFilePath);
-          const result = await parseTCB(buffer);
+          const result = await parseTcbPdf(buffer);
           const validation = WindSignalSchema.safeParse(result);
 
           expect(validation.success).toBe(true);
@@ -51,7 +51,7 @@ describe("parseTCB", () => {
 
       describe("chaining with .jsonStringified()", () => {
         it("should parse from a file path and return a valid JSON string", async () => {
-          const jsonOutput = await parseTCB(testFilePath).jsonStringified();
+          const jsonOutput = await parseTcbPdf(testFilePath).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -66,7 +66,7 @@ describe("parseTCB", () => {
 
         it("should parse from a buffer and return a valid JSON string", async () => {
           const buffer = readFileSync(testFilePath);
-          const jsonOutput = await parseTCB(buffer).jsonStringified();
+          const jsonOutput = await parseTcbPdf(buffer).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -80,7 +80,7 @@ describe("parseTCB", () => {
         });
 
         it("should allow custom spacing for the JSON output", async () => {
-          const jsonOutput = await parseTCB(testFilePath).jsonStringified(4);
+          const jsonOutput = await parseTcbPdf(testFilePath).jsonStringified(4);
           const lines = jsonOutput.split("\n");
 
           expect(() => JSON.parse(jsonOutput)).not.toThrow();
@@ -95,28 +95,27 @@ describe("parseTCB", () => {
 
   describe("error handling", () => {
     it("should throw a synchronous error for invalid input type", () => {
-      expect(() => parseTCB(123 as any)).toThrow(
+      expect(() => parseTcbPdf(123 as any)).toThrow(
         "Invalid input: expected string (file path) or Buffer",
       );
     });
 
     it("should reject for a non-existent file", async () => {
-      await expect(parseTCB("/non/existent/file.pdf")).rejects.toThrow(
+      await expect(parseTcbPdf("/non/existent/file.pdf")).rejects.toThrow(
         "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
-
     it("should reject for an invalid buffer", async () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
-      await expect(parseTCB(invalidBuffer)).rejects.toThrow(
+      await expect(parseTcbPdf(invalidBuffer)).rejects.toThrow(
         "Invalid PDF structure",
       );
     });
 
     it("should reject the .jsonStringified() chain if the core promise fails", async () => {
       await expect(
-        parseTCB("/non/existent/file.pdf").jsonStringified(),
+        parseTcbPdf("/non/existent/file.pdf").jsonStringified(),
       ).rejects.toThrow(
         "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );

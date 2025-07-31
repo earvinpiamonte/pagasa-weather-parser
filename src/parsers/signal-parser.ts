@@ -21,9 +21,9 @@ export const extractSignals = (text: string): WindSignals => {
 
       signals[signalNumber] = {
         regions: {
-          Luzon: regions.Luzon,
-          Visayas: regions.Visayas,
-          Mindanao: regions.Mindanao,
+          luzon: regions.luzon,
+          visayas: regions.visayas,
+          mindanao: regions.mindanao,
         },
       };
     }

@@ -8,21 +8,21 @@ import {
 export const extractRegionsFromBlock = (
   block: string,
 ): {
-  Luzon: Area[];
-  Visayas: Area[];
-  Mindanao: Area[];
+  luzon: Area[];
+  visayas: Area[];
+  mindanao: Area[];
 } => {
-  const rawAreaText = extractTCWSAreaText(block);
+  const rawAreaText = extractTcwsAreaText(block);
   const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
 
   return {
-    Luzon: mergeAreas(parsedAreas),
-    Visayas: [],
-    Mindanao: [],
+    luzon: mergeAreas(parsedAreas),
+    visayas: [],
+    mindanao: [],
   };
 };
 
-export const extractTCWSAreaText = (block: string): string => {
+export const extractTcwsAreaText = (block: string): string => {
   const lines = block
     .split("\n")
     .map((line) => line.trim())
