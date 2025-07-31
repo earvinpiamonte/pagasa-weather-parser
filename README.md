@@ -258,19 +258,19 @@ The package exports a single function that can handle both file paths and buffer
 
 | Function/Method | Parameters | Returns | Description |
 |-----------------|------------|---------|-------------|
-| `parseTcbPdf(input)` | `input`: `string` or `Buffer` | `ParsedTCBPromise` | Parses a PDF from a file path or buffer. |
+| `parseTcbPdf(input)` | `input`: `string` or `Buffer` | `ParsedTcbPdfPromise` | Parses a PDF from a file path or buffer. |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>` | A chainable method that returns the parsed result as a JSON string. |
 
 #### Function Signature
 
 ```typescript
-import { ParsedTCBPromise } from "@earvinpiamonte/pagasa-tcb-parser";
+import { ParsedTcbPdfPromise } from "@earvinpiamonte/pagasa-tcb-parser";
 
 /**
  * Parses a PAGASA TCB PDF from a file path or Buffer.
- * Returns a ParsedTCBPromise: a Promise<WindSignals>.
+ * Returns a ParsedTcbPdfPromise: a Promise<WindSignals>.
  */
-declare function parseTcbPdf(input: string | Buffer): ParsedTCBPromise;
+declare function parseTcbPdf(input: string | Buffer): ParsedTcbPdfPromise;
 ```
 
 ## Development
@@ -279,13 +279,13 @@ declare function parseTcbPdf(input: string | Buffer): ParsedTCBPromise;
 
 This package is written in TypeScript and includes type definitions.
 
-> **Note:** The package exports the `ParsedTCBPromise` type for advanced typing, which extends `Promise<WindSignals>` with a `.jsonStringified()` method.
+> **Note:** The package exports the `ParsedTcbPdfPromise` type for advanced typing, which extends `Promise<WindSignals>` with a `.jsonStringified()` method.
 
 ```typescript
-import parseTcbPdf, { ParsedTCBPromise, WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
+import parseTcbPdf, { ParsedTcbPdfPromise, WindSignals, Regions, Area } from "@earvinpiamonte/pagasa-tcb-parser";
 
 // Parse from file path
-const result: ParsedTCBPromise = await parseTcbPdf('/path/to/file.pdf');
+const result: ParsedTcbPdfPromise = await parseTcbPdf('/path/to/file.pdf');
 
 // With JSON stringified
 const jsonResult: string = await result.jsonStringified();

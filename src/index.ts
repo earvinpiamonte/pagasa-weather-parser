@@ -2,11 +2,11 @@ import { promises as fs } from "fs";
 import { parsePdfFromBuffer } from "./parsers/pdf-parser";
 import { WindSignals, Regions, Area } from "./types/index";
 
-export interface ParsedTCBPromise extends Promise<WindSignals> {
+export interface ParsedTcbPdfPromise extends Promise<WindSignals> {
   jsonStringified(space?: number | string): Promise<string>;
 }
 
-const parseTcbPdf = (input: string | Buffer): ParsedTCBPromise => {
+const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
   if (typeof input !== "string" && !Buffer.isBuffer(input)) {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
@@ -17,7 +17,7 @@ const parseTcbPdf = (input: string | Buffer): ParsedTCBPromise => {
     return await parsePdfFromBuffer(buffer);
   })();
 
-  const result = corePromise as ParsedTCBPromise;
+  const result = corePromise as ParsedTcbPdfPromise;
 
   result.jsonStringified = async (space: number | string = 2) => {
     const data = await corePromise;
