@@ -12,7 +12,7 @@ export const extractRegionsFromBlock = (
   visayas: Area[];
   mindanao: Area[];
 } => {
-  const rawAreaText = extractTCWSAreaText(block);
+  const rawAreaText = extractTcwsAreaText(block);
   const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
 
   return {
@@ -22,7 +22,7 @@ export const extractRegionsFromBlock = (
   };
 };
 
-export const extractTCWSAreaText = (block: string): string => {
+export const extractTcwsAreaText = (block: string): string => {
   const lines = block
     .split("\n")
     .map((line) => line.trim())
