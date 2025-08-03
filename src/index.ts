@@ -35,7 +35,3 @@ export default parseTcbPdf;
 
 export { WindSignals, Regions, Area };
 
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-  module.exports = parseTcbPdf;
-  module.exports.parseTcbPdf = parseTcbPdf;
-}
