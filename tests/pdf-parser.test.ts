@@ -28,6 +28,16 @@ describe("parseTcb", () => {
     file.endsWith(".pdf"),
   );
 
+  it("should have default import as a function", () => {
+    expect(typeof parseTcbPdf).toBe("function");
+  });
+
+  it("should call the default import directly and throw for invalid input", () => {
+    expect(() => parseTcbPdf(123 as any)).toThrow(
+      "Invalid input: expected string (file path) or Buffer"
+    );
+  });
+
   pdfFiles.forEach((file) => {
     describe(`for file: ${file}`, () => {
       const testFilePath = join(pdfDirectory, file);
