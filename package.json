@@ -1,7 +1,8 @@
 {
   "name": "@earvinpiamonte/pagasa-tcb-parser",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A TypeScript library for parsing PAGASA weather bulletin PDF files",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

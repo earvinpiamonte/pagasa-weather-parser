@@ -28,13 +28,8 @@ const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
   return result;
 };
 
-
 export { parseTcbPdf };
 
 export default parseTcbPdf;
 
 export { WindSignals, Regions, Area };
-
-module.exports = parseTcbPdf;
-module.exports.parseTcbPdf = parseTcbPdf;
-module.exports.default = parseTcbPdf;
