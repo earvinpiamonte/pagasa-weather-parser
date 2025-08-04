@@ -269,6 +269,29 @@ declare function parseTcbPdf(input: string | Buffer): ParsedTcbPdfPromise;
 
 ## Development
 
+### Build Process
+
+This package uses a custom build process to ensure ES module compatibility:
+
+1. **TypeScript Compilation**: The source code is compiled from TypeScript to JavaScript using `tsc`
+2. **Import Extension Fix**: A post-build script automatically adds `.js` extensions to all relative imports in the compiled JavaScript files
+
+The build process is configured in `package.json`:
+
+```json
+{
+  "scripts": {
+    "build": "tsc && node scripts/fix-imports.js"
+  }
+}
+```
+
+#### Why This is Needed
+
+ES modules in Node.js require explicit file extensions for relative imports. While TypeScript allows you to write clean imports without extensions (e.g., `import { foo } from "./bar"`), the compiled JavaScript must include the `.js` extension (e.g., `import { foo } from "./bar.js"`) to work properly in Node.js.
+
+The post-build script (`scripts/fix-imports.js`) automatically converts all relative imports to include the proper `.js` extensions, allowing you to write clean TypeScript code without manual extension management.
+
 ### TypeScript Support
 
 This package is written in TypeScript and includes type definitions.
