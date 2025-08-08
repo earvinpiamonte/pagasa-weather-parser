@@ -128,7 +128,9 @@ export const containsAreaNames = (line: string): boolean => {
   const hasAreaKeywords = PATTERNS.areaLineKeywords.test(line);
 
   // Starts with a known signal header is already filtered. Keep lines with title-case words and avoid all-caps metadata
-  const looksLikeProperNouns = /[A-Z][a-z]+(?:\s+[A-Z][a-z\-]+)*/.test(line);
+  const looksLikeProperNouns =
+    /\b[A-Z][a-z'’\-]+(?:\s+[A-Z][a-z'’\-]+)*\b/.test(line) ||
+    /\b[A-Z]{3,}\b/.test(line);
 
   // Consider a line an area line if it has list delimiters or area keywords and looks like it contains proper nouns.
   return (hasListDelimiters || hasAreaKeywords) && looksLikeProperNouns;
