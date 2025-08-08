@@ -123,7 +123,7 @@ export const containsAreaNames = (line: string): boolean => {
   }
 
   // Area lines often contain commas/and-separated phrases with optional portion/rest/mainland keywords, e.g. "northern portion of Cagayan, Ilocos Norte and Abra"
-  const hasListDelimiters = /,|;|\sand\s/i.test(line);
+  const hasListDelimiters = /,|;|\band\b/i.test(line);
 
   const hasAreaKeywords = PATTERNS.areaLineKeywords.test(line);
 
