@@ -36,7 +36,8 @@ export const PATTERNS = {
     /^\s*\d+\s*$|bulletin|tropical|storm|issued|valid|broadcast|prepared|checked|tracking|weather|flood|forecasting|tel|senator|website|brgy|philippines|republic|department|science|technology|pagasa|atmospheric|geophysical|astronomical|services|administration|division|page\s+\d+/i,
   // skip lines for hazard descriptors and units anywhere in the line
   skipLine:
-    /\b(Wind threat|Storm-force|Gale-force|Range of wind|Potential impacts|Warning lead time|Beaufort|km\/h|hours|Luzon|Visayas|Mindanao)\b/i,
+    /\b(Wind threat|Storm-force|Gale-force|Range of wind|Potential impacts|Warning lead time|Beaufort|km\/h|hours)\b/i,
+  regionHeading: /^\s*(Luzon|Visayas|Mindanao)\s*[:\-]?\s*$/i,
   // keywords that often appear around area listings
   areaLineKeywords: /(portion\s+of|rest\s+of|mainland|islands?)/i,
 } as const;

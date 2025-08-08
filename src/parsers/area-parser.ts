@@ -43,7 +43,7 @@ export const extractTcwsAreaText = (block: string): string => {
       continue;
     }
 
-    if (PATTERNS.skipLine.test(line)) {
+    if (PATTERNS.skipLine.test(line) || PATTERNS.regionHeading.test(line)) {
       continue;
     }
 
