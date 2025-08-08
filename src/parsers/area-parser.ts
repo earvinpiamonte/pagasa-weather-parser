@@ -1,4 +1,4 @@
-import { PATTERNS, SKIP_TERMS } from "../constants/patterns";
+import { PATTERNS } from "../constants/patterns";
 import { Area } from "../types/index";
 import {
   splitPreservingParentheses,
@@ -6,7 +6,7 @@ import {
 } from "../utils/text-utils";
 
 export const extractRegionsFromBlock = (
-  block: string,
+  block: string
 ): {
   luzon: Area[];
   visayas: Area[];
@@ -43,17 +43,7 @@ export const extractTcwsAreaText = (block: string): string => {
       continue;
     }
 
-    if (
-      SKIP_TERMS.has(line) ||
-      line.includes("Wind threat") ||
-      line.includes("Storm-force") ||
-      line.includes("Gale-force") ||
-      line.includes("Range of wind") ||
-      line.includes("Potential impacts") ||
-      line.includes("Beaufort") ||
-      line.includes("hours") ||
-      line.includes("km/h")
-    ) {
+    if (PATTERNS.skipLine.test(line) || PATTERNS.regionHeading.test(line)) {
       continue;
     }
 
@@ -128,7 +118,22 @@ export const mergeAreas = (areas: Area[]): Area[] => {
 };
 
 export const containsAreaNames = (line: string): boolean => {
-  return !PATTERNS.skipMetadata.test(line) && PATTERNS.areaNames.test(line);
+  if (PATTERNS.skipMetadata.test(line) || PATTERNS.skipLine.test(line)) {
+    return false;
+  }
+
+  // Area lines often contain commas/and-separated phrases with optional portion/rest/mainland keywords, e.g. "northern portion of Cagayan, Ilocos Norte and Abra"
+  const hasListDelimiters = /,|;|\band\b/i.test(line);
+
+  const hasAreaKeywords = PATTERNS.areaLineKeywords.test(line);
+
+  // Starts with a known signal header is already filtered. Keep lines with title-case words and avoid all-caps metadata
+  const looksLikeProperNouns =
+    /\b[A-Z][a-z'’\-]+(?:\s+[A-Z][a-z'’\-]+)*\b/.test(line) ||
+    /\b[A-Z]{3,}\b/.test(line);
+
+  // Consider a line an area line if it has list delimiters or area keywords and looks like it contains proper nouns.
+  return (hasListDelimiters || hasAreaKeywords) && looksLikeProperNouns;
 };
 
 export const parseArea = (areaText: string): Area | null => {
