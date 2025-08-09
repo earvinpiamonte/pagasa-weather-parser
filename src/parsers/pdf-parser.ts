@@ -11,13 +11,16 @@ const toISO = (
   time: string | undefined,
   meridian: string | undefined
 ): string | undefined => {
-  if (!date || !time || !meridian) return undefined;
+  if (!date || !time || !meridian) {
+    return undefined;
+  }
+
   try {
     const base = `${date} ${time} ${meridian}`;
 
-    const d = new Date(base + " GMT+0800");
+    const dateObject = new Date(base + " GMT+0800");
 
-    return isNaN(d.getTime()) ? undefined : d.toISOString();
+    return isNaN(dateObject.getTime()) ? undefined : dateObject.toISOString();
   } catch {
     return undefined;
   }
@@ -34,17 +37,17 @@ const extractMeta = (text: string) => {
   let dateIssuedISO: string | undefined;
 
   if (!issued) {
-    const alt = text.match(PATTERNS.issuedAlt);
+    const issuedAlternateMatch = text.match(PATTERNS.issuedAlt);
 
-    if (alt) {
-      const time = alt[1];
-      const mer = alt[2];
-      const day = alt[3];
-      const month = alt[4];
-      const year = alt[5];
+    if (issuedAlternateMatch) {
+      const time = issuedAlternateMatch[1];
+      const meridian = issuedAlternateMatch[2];
+      const day = issuedAlternateMatch[3];
+      const month = issuedAlternateMatch[4];
+      const year = issuedAlternateMatch[5];
 
-      dateIssued = `${month} ${day}, ${year} ${time} ${mer}`;
-      dateIssuedISO = toISO(`${month} ${day}, ${year}`, time, mer);
+      dateIssued = `${month} ${day}, ${year} ${time} ${meridian}`;
+      dateIssuedISO = toISO(`${month} ${day}, ${year}`, time, meridian);
     }
   }
 
@@ -57,18 +60,18 @@ const extractMeta = (text: string) => {
   let dateValidUntilISO: string | undefined;
 
   if (!valid) {
-    const vt = text.match(PATTERNS.validTodayTime);
+    const validTodayTimeMatch = text.match(PATTERNS.validTodayTime);
 
-    if (vt && dateIssued) {
+    if (validTodayTimeMatch && dateIssued) {
       // Reuse issued date's date part (Month Day, Year)
       const datePart = (dateIssued.match(/([A-Za-z]+\s+\d{1,2},\s*\d{4})/) ||
         [])[1];
-      const time = vt[1];
-      const mer = vt[2];
+      const time = validTodayTimeMatch[1];
+      const meridian = validTodayTimeMatch[2];
 
       if (datePart) {
-        dateValidUntil = `${datePart} ${time} ${mer}`;
-        dateValidUntilISO = toISO(datePart, time, mer);
+        dateValidUntil = `${datePart} ${time} ${meridian}`;
+        dateValidUntilISO = toISO(datePart, time, meridian);
       }
     }
   }
@@ -81,70 +84,68 @@ const extractMeta = (text: string) => {
   let description: string | undefined;
 
   if (subtitle) {
-    const idx = text.indexOf(subtitle);
+    const subtitleIndex = text.indexOf(subtitle);
 
-    if (idx !== -1) {
-      const after = text
-        .slice(idx + subtitle.length)
+    if (subtitleIndex !== -1) {
+      const linesAfterSubtitle = text
+        .slice(subtitleIndex + subtitle.length)
         .split(/\n+/)
-        .map((l) => l.trim());
+        .map((line) => line.trim());
 
       let capturing = false;
 
-      const parts: string[] = [];
+      const descriptionLines: string[] = [];
 
-      for (const raw of after) {
-        if (!raw) {
+      for (const line of linesAfterSubtitle) {
+        if (!line) {
           continue;
         }
 
-        if (/^TROPICAL CYCLONE WIND SIGNALS/i.test(raw)) {
+        if (/^TROPICAL CYCLONE WIND SIGNALS/i.test(line)) {
           break;
         }
 
-        // Skip obvious metadata/header blocks
         if (
           /^(Issued at|Valid for broadcast|Prepared by:|Checked by:|Page \d+ of \d+|Republic of the Philippines|DEPARTMENT OF SCIENCE|Philippine Atmospheric|Services Administration|Weather Division|MMSS-\d+)/i.test(
-            raw
+            line
           )
         ) {
           if (!capturing) {
             continue;
-          } else {
-            break;
           }
+
+          break;
         }
 
-        const isUpper = /^[A-Z0-9 “”"'(),.-]+$/.test(raw) && /[A-Z]/.test(raw);
+        const isUpper =
+          /^[A-Z0-9 “”"'(),.-]+$/.test(line) && /[A-Z]/.test(line);
 
         if (!capturing) {
-          // Start when line contains cyclone name or verbs and is uppercase-ish
           if (
             isUpper &&
             /(EMONG|WEAKENS|INTENSIFIES|MAINTAINS|ENTERS|PASSES|APPROACHES|EXIT)/.test(
-              raw
+              line
             )
           ) {
             capturing = true;
-
-            parts.push(raw.replace(/\s+/g, " ").trim());
+            descriptionLines.push(line.replace(/\s+/g, " ").trim());
           }
         } else {
-          // Continue while uppercase sequence
           if (isUpper) {
-            parts.push(raw.replace(/\s+/g, " ").trim());
+            descriptionLines.push(line.replace(/\s+/g, " ").trim());
             continue;
           }
 
           break;
         }
-        if (parts.length >= 2) {
+
+        if (descriptionLines.length >= 2) {
           break;
         }
       }
 
-      if (parts.length) {
-        description = parts.join(" ");
+      if (descriptionLines.length) {
+        description = descriptionLines.join(" ");
       }
     }
   }

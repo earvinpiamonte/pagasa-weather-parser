@@ -138,7 +138,10 @@ export const containsAreaNames = (line: string): boolean => {
 
 export const parseArea = (areaText: string): Area | null => {
   const cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
-  if (!cleanArea || cleanArea.length < 3) return null;
+
+  if (!cleanArea || cleanArea.length < 3) {
+    return null;
+  }
 
   const partDescriptors: string[] = [];
   let workingArea = cleanArea;
@@ -165,7 +168,10 @@ export const parseArea = (areaText: string): Area | null => {
   if (additionalMatch) {
     additionalMatch.forEach((portion) => {
       const p = portion.toLowerCase();
-      if (!partDescriptors.includes(p)) partDescriptors.push(p);
+
+      if (!partDescriptors.includes(p)) {
+        partDescriptors.push(p);
+      }
     });
   }
 
@@ -173,10 +179,16 @@ export const parseArea = (areaText: string): Area | null => {
   workingArea = workingArea.replace(PATTERNS.cleanPortion, "");
 
   const { name, municipalities } = extractMunicipalities(workingArea);
+
   const result: Area = { name: name.trim() };
 
-  if (partDescriptors.length > 0) result.parts = partDescriptors;
-  if (municipalities.length > 0) result.locals = municipalities;
+  if (partDescriptors.length > 0) {
+    result.parts = partDescriptors;
+  }
+
+  if (municipalities.length > 0) {
+    result.locals = municipalities;
+  }
 
   return result;
 };
