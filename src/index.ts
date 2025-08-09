@@ -1,8 +1,14 @@
 import { promises as fs } from "fs";
 import { parsePdfFromBuffer } from "./parsers/pdf-parser";
-import { WindSignals, Regions, Area } from "./types/index";
+import {
+  WindSignals,
+  Regions,
+  Area,
+  BulletinData,
+  CycloneInfo,
+} from "./types/index";
 
-export interface ParsedTcbPdfPromise extends Promise<WindSignals> {
+export interface ParsedTcbPdfPromise extends Promise<BulletinData> {
   jsonStringified(space?: number | string): Promise<string>;
 }
 
@@ -11,7 +17,7 @@ const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
 
-  const corePromise = (async (): Promise<WindSignals> => {
+  const corePromise = (async (): Promise<BulletinData> => {
     const buffer = typeof input === "string" ? await fs.readFile(input) : input;
 
     return await parsePdfFromBuffer(buffer);
@@ -28,12 +34,11 @@ const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
   return result;
 };
 
-
 export { parseTcbPdf };
 
 export default parseTcbPdf;
 
-export { WindSignals, Regions, Area };
+export { WindSignals, Regions, Area, BulletinData, CycloneInfo };
 
 module.exports = parseTcbPdf;
 module.exports.parseTcbPdf = parseTcbPdf;

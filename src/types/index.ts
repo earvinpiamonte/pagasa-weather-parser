@@ -17,3 +17,19 @@ export interface WindSignals {
     [key: string]: Regions;
   };
 }
+
+export interface CycloneInfo extends WindSignals {
+  name?: string;
+  internationalName?: string;
+}
+
+export interface BulletinData {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  dateIssued?: string;
+  dateIssuedISO?: string;
+  dateValidUntil?: string;
+  dateValidUntilISO?: string;
+  cyclone: CycloneInfo;
+}

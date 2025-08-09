@@ -73,7 +73,9 @@ export const extractSignalBlocks = (tcwsSection: string): string[] => {
 export const extractSignalNumber = (block: string): string | null => {
   const numberMatch = block.match(PATTERNS.signalMatch);
 
-  if (numberMatch) return numberMatch[1];
+  if (numberMatch) {
+    return numberMatch[1];
+  }
 
   const tcwsMatch = block.match(PATTERNS.tcwsNumber);
 

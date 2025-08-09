@@ -15,6 +15,18 @@ const DIR_GROUP = DIRECTIONS.join("|");
 
 export const PATTERNS = {
   tcws: /TROPICAL CYCLONE WIND SIGNALS.*?IN EFFECT(.*?)(?=OTHER HAZARDS|HAZARDS AFFECTING|$)/s,
+  bulletinTitle: /(TROPICAL\s+CYCLONE\s+BULLETIN\s+NR\.\s*\d+)/i,
+  bulletinSubtitle:
+    /(Tropical\s+Storm\s+[A-Z]+\s*\([^)]*\)|Typhoon\s+[A-Z]+\s*\([^)]*\)|Severe\s+Tropical\s+Storm\s+[A-Z]+\s*\([^)]*\))/i,
+  cycloneNames:
+    /\b(Tropical\s+Storm|Typhoon|Severe\s+Tropical\s+Storm)\s+([A-Z]+)\s*\(([^)]+)\)/i,
+  issued:
+    /Issued\s+at\s+([A-Za-z]+\s+\d{1,2},\s*\d{4})\s*(\d{1,2}:\d{2})\s*(AM|PM)/i,
+  validUntil:
+    /Valid\s+Until\s*:?.{0,10}?([A-Za-z]+\s+\d{1,2},\s*\d{4})\s*(\d{1,2}:\d{2})\s*(AM|PM)/i,
+  issuedAlt:
+    /Issued\s+at\s+(\d{1,2}:\d{2})\s*(AM|PM),\s*(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/i, // time first then day Month Year
+  validTodayTime: /Valid[^\n]*?at\s+(\d{1,2}:\d{2})\s*(AM|PM)\s+today\.?/i,
   signalNumber: /^[12345]\s*$/,
   tcwsNumber: /TCWS\s+No\.\s*([12345])/i,
   signalMatch: /^\s*([12345])\s*$/m,
