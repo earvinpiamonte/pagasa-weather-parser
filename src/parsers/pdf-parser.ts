@@ -121,9 +121,8 @@ const extractMeta = (text: string) => {
           /^[A-Z0-9 “”"'(),.-]+$/.test(line) && /[A-Z]/.test(line);
 
         if (!capturing) {
-          const cycloneNameFromSubtitle = subtitle
-            ?.match(/“?\"?([A-Z]{3,})/)
-            ?.[1];
+          const cycloneNameFromSubtitle =
+            subtitle?.match(/“?\"?([A-Z]{3,})/)?.[1];
           const dynamicPatternParts = [
             "WEAKENS",
             "INTENSIFIES",
@@ -140,7 +139,7 @@ const extractMeta = (text: string) => {
             "RE-?INTENSIFIES",
             "DEVELOPS",
             "DISSIPATES",
-            "REMNANT\s+LOW",
+            "REMNANTs+LOW",
           ];
           if (cycloneNameFromSubtitle) {
             dynamicPatternParts.unshift(cycloneNameFromSubtitle);
