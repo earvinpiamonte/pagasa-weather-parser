@@ -9,17 +9,30 @@ const AreaSchema = z.object({
   locals: z.array(z.string()).optional(),
 });
 
-const WindSignalSchema = z.object({
-  signals: z.record(
-    z.string(),
-    z.object({
-      regions: z.object({
-        luzon: z.array(AreaSchema),
-        visayas: z.array(AreaSchema),
-        mindanao: z.array(AreaSchema),
-      }),
-    })
-  ),
+const WindSignalSchema = z.record(
+  z.string(),
+  z.object({
+    regions: z.object({
+      luzon: z.array(AreaSchema),
+      visayas: z.array(AreaSchema),
+      mindanao: z.array(AreaSchema),
+    }),
+  })
+);
+
+const BulletinSchema = z.object({
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  description: z.string().optional(),
+  dateIssued: z.string().optional(),
+  dateIssuedISO: z.string().optional(),
+  dateValidUntil: z.string().optional(),
+  dateValidUntilISO: z.string().optional(),
+  cyclone: z.object({
+    name: z.string().optional(),
+    internationalName: z.string().optional(),
+    signals: WindSignalSchema,
+  }),
 });
 
 describe("parseTcb", () => {
@@ -35,15 +48,18 @@ describe("parseTcb", () => {
       describe("standard parsing (without chaining)", () => {
         it("should parse from a file path and return a valid WindSignals object", async () => {
           const result = await parseTcbPdf(testFilePath);
-          const validation = WindSignalSchema.safeParse(result);
+
+          const validation = BulletinSchema.safeParse(result);
 
           expect(validation.success).toBe(true);
         });
 
         it("should parse from a buffer and return a valid WindSignals object", async () => {
           const buffer = readFileSync(testFilePath);
+
           const result = await parseTcbPdf(buffer);
-          const validation = WindSignalSchema.safeParse(result);
+
+          const validation = BulletinSchema.safeParse(result);
 
           expect(validation.success).toBe(true);
         });
@@ -58,7 +74,7 @@ describe("parseTcb", () => {
           expect(() => {
             const parsed = JSON.parse(jsonOutput);
 
-            const validation = WindSignalSchema.safeParse(parsed);
+            const validation = BulletinSchema.safeParse(parsed);
 
             expect(validation.success).toBe(true);
           }).not.toThrow();
@@ -66,6 +82,7 @@ describe("parseTcb", () => {
 
         it("should parse from a buffer and return a valid JSON string", async () => {
           const buffer = readFileSync(testFilePath);
+
           const jsonOutput = await parseTcbPdf(buffer).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
@@ -73,7 +90,7 @@ describe("parseTcb", () => {
           expect(() => {
             const parsed = JSON.parse(jsonOutput);
 
-            const validation = WindSignalSchema.safeParse(parsed);
+            const validation = BulletinSchema.safeParse(parsed);
 
             expect(validation.success).toBe(true);
           }).not.toThrow();
@@ -81,6 +98,7 @@ describe("parseTcb", () => {
 
         it("should allow custom spacing for the JSON output", async () => {
           const jsonOutput = await parseTcbPdf(testFilePath).jsonStringified(4);
+
           const lines = jsonOutput.split("\n");
 
           expect(() => JSON.parse(jsonOutput)).not.toThrow();
