@@ -3,7 +3,7 @@ import { WindSignals } from "../types/index";
 import { extractSignals } from "./signal-parser";
 
 export const parsePdfFromBuffer = async (
-  buffer: Buffer,
+  buffer: Buffer
 ): Promise<WindSignals> => {
   try {
     const data = await pdf(buffer);
@@ -11,7 +11,9 @@ export const parsePdfFromBuffer = async (
     return extractSignals(data.text);
   } catch (error) {
     throw new Error(
-      `Failed to parse PDF buffer: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to parse PDF buffer: ${
+        error instanceof Error ? error.message : String(error)
+      }`
     );
   }
 };

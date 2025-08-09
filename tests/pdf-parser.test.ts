@@ -18,14 +18,14 @@ const WindSignalSchema = z.object({
         visayas: z.array(AreaSchema),
         mindanao: z.array(AreaSchema),
       }),
-    }),
+    })
   ),
 });
 
 describe("parseTcb", () => {
   const pdfDirectory = join(__dirname, "data");
   const pdfFiles = readdirSync(pdfDirectory).filter((file) =>
-    file.endsWith(".pdf"),
+    file.endsWith(".pdf")
   );
 
   pdfFiles.forEach((file) => {
@@ -96,28 +96,28 @@ describe("parseTcb", () => {
   describe("error handling", () => {
     it("should throw a synchronous error for invalid input type", () => {
       expect(() => parseTcbPdf(123 as any)).toThrow(
-        "Invalid input: expected string (file path) or Buffer",
+        "Invalid input: expected string (file path) or Buffer"
       );
     });
 
     it("should reject for a non-existent file", async () => {
       await expect(parseTcbPdf("/non/existent/file.pdf")).rejects.toThrow(
-        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'"
       );
     });
     it("should reject for an invalid buffer", async () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
       await expect(parseTcbPdf(invalidBuffer)).rejects.toThrow(
-        "Invalid PDF structure",
+        "Invalid PDF structure"
       );
     });
 
     it("should reject the .jsonStringified() chain if the core promise fails", async () => {
       await expect(
-        parseTcbPdf("/non/existent/file.pdf").jsonStringified(),
+        parseTcbPdf("/non/existent/file.pdf").jsonStringified()
       ).rejects.toThrow(
-        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'"
       );
     });
   });

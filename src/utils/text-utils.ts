@@ -44,7 +44,7 @@ export const splitPreservingParentheses = (text: string): string[] => {
 };
 
 export const extractMunicipalities = (
-  areaText: string,
+  areaText: string
 ): {
   name: string;
   municipalities: string[];
