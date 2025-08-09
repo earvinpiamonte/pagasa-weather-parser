@@ -139,7 +139,7 @@ const extractMeta = (text: string) => {
             "RE-?INTENSIFIES",
             "DEVELOPS",
             "DISSIPATES",
-            "REMNANTs+LOW",
+            "REMNANT\\s+LOW",
           ];
           if (cycloneNameFromSubtitle) {
             dynamicPatternParts.unshift(cycloneNameFromSubtitle);
