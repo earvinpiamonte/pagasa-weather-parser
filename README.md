@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/@earvinpiamonte/pagasa-tcb-parser.svg)](https://www.npmjs.com/package/@earvinpiamonte/pagasa-tcb-parser)
 [![Tests](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml)
 
-A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) PDF files.
+A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) and advisory (TCA) PDF files.
 
 ## Installation
 
@@ -106,89 +106,34 @@ The parser returns a structured JavaScript object:
   "cyclone": {
     "name": "EMONG",
     "internationalName": "CO-MAY",
-    "signals": {
-      "1": {
+    "signals": [
+      {
+        "level": 1,
         "regions": {
           "luzon": [
-            {
-              "name": "Ilocos Norte",
-              "parts": ["rest"]
-            },
+            { "name": "Ilocos Norte", "parts": ["rest"] },
             {
               "name": "Ilocos Sur",
               "parts": ["northern"],
-              "locals": [
-                "Gregorio del Pilar",
-                "Magsingal",
-                "San Esteban",
-                "Banayoyo",
-                "Burgos",
-                "City of Candon",
-                "Santiago",
-                "San Vicente",
-                "Santa Catalina",
-                "Lidlidda",
-                "Nagbukel",
-                "Sinait",
-                "Sigay",
-                "San Ildefonso",
-                "Galimuyod",
-                "Quirino",
-                "City of Vigan",
-                "San Emilio",
-                "Cabugao",
-                "Caoayan",
-                "San Juan",
-                "Santa",
-                "Bantay",
-                "Santo Domingo",
-                "Santa Maria",
-                "Narvacan",
-                "Salcedo",
-                "Cervantes"
-              ]
+              "locals": ["Gregorio del Pilar", "Magsingal" /* ... */]
             },
-            {
-              "name": "Abra"
-            },
-            {
-              "name": "Apayao",
-              "parts": ["rest"]
-            },
-            {
-              "name": "Kalinga"
-            },
-            {
-              "name": "Mountain Province"
-            },
-            {
-              "name": "Cagayan",
-              "parts": ["rest", "mainland"]
-            },
+            { "name": "Abra" },
+            { "name": "Apayao", "parts": ["rest"] },
+            { "name": "Kalinga" },
+            { "name": "Mountain Province" },
+            { "name": "Cagayan", "parts": ["rest", "mainland"] },
             {
               "name": "Isabela",
               "parts": ["northern"],
-              "locals": [
-                "Quirino",
-                "Mallig",
-                "Quezon",
-                "Delfin Albano",
-                "Tumauini",
-                "Maconacon",
-                "San Pablo",
-                "Santa Maria",
-                "Cabagan",
-                "Santo Tomas",
-                "Roxas",
-                "San Manuel"
-              ]
+              "locals": ["Quirino", "Mallig" /* ... */]
             }
           ],
           "visayas": [],
           "mindanao": []
         }
       },
-      "2": {
+      {
+        "level": 2,
         "regions": {
           "luzon": [
             /* ... */
@@ -197,7 +142,7 @@ The parser returns a structured JavaScript object:
           "mindanao": []
         }
       }
-    }
+    ]
   }
 }
 ```
@@ -237,7 +182,6 @@ This package is written in TypeScript and includes type definitions.
 import parseTcbPdf, {
   ParsedTcbPdfPromise,
   BulletinData,
-  WindSignals,
   Regions,
   Area,
   CycloneInfo,
@@ -251,9 +195,20 @@ const jsonResult: string = await promise.jsonStringified();
 // Option 2: Direct await (no need to store promise separately)
 const bulletin2: BulletinData = await parseTcbPdf("/path/to/another.pdf");
 
-// Access nested structures with exported helper types
-const signal1: Regions = bulletin.cyclone.signals["1"];
-const area: Area | undefined = signal1.regions.luzon[0];
+// Access signal data (array)
+const signalNumberOne = bulletin.cyclone.signals[0]?.level; // number | undefined
+const firstLuzonArea: Area | undefined =
+  bulletin.cyclone.signals[0]?.regions.luzon[0];
+
+// Find a specific signal level
+const signalNumberTwo = bulletin.cyclone.signals.find(
+  (signal) => signal.level === 2
+);
+
+// Length check
+if (bulletin.cyclone.signals.length === 0) {
+  // no active signals
+}
 ```
 
 ### Testing

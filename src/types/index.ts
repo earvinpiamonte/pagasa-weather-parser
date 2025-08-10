@@ -12,15 +12,19 @@ export interface Regions {
   };
 }
 
-export interface WindSignals {
-  signals: {
-    [key: string]: Regions;
+export interface CycloneSignal {
+  level: number;
+  regions: {
+    luzon: Area[];
+    visayas: Area[];
+    mindanao: Area[];
   };
 }
 
-export interface CycloneInfo extends WindSignals {
+export interface CycloneInfo {
   name: string | null;
   internationalName: string | null;
+  signals: CycloneSignal[];
 }
 
 export interface BulletinData {

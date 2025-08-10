@@ -13,8 +13,9 @@ const expected = {
   cyclone: {
     name: "EMONG",
     internationalName: "CO-MAY",
-    signals: {
-      "1": {
+    signals: [
+      {
+        level: 1,
         regions: {
           luzon: [
             { name: "Ilocos Norte", parts: ["rest"] },
@@ -80,7 +81,8 @@ const expected = {
           mindanao: [],
         },
       },
-      "2": {
+      {
+        level: 2,
         regions: {
           luzon: [
             {
@@ -116,7 +118,7 @@ const expected = {
           mindanao: [],
         },
       },
-    },
+    ],
   },
 };
 

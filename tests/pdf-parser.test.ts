@@ -11,16 +11,14 @@ const AreaSchema = z.object({
   locals: z.array(z.string()).optional(),
 });
 
-const WindSignalSchema = z.record(
-  z.string(),
-  z.object({
-    regions: z.object({
-      luzon: z.array(AreaSchema),
-      visayas: z.array(AreaSchema),
-      mindanao: z.array(AreaSchema),
-    }),
-  })
-);
+const CycloneSignalSchema = z.object({
+  level: z.number(),
+  regions: z.object({
+    luzon: z.array(AreaSchema),
+    visayas: z.array(AreaSchema),
+    mindanao: z.array(AreaSchema),
+  }),
+});
 
 const BulletinSchema = z.object({
   title: nullableString,
@@ -33,7 +31,7 @@ const BulletinSchema = z.object({
   cyclone: z.object({
     name: nullableString,
     internationalName: nullableString,
-    signals: WindSignalSchema,
+    signals: z.array(CycloneSignalSchema),
   }),
 });
 

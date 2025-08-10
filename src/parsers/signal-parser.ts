@@ -1,13 +1,13 @@
 import { PATTERNS } from "../constants/patterns";
-import { WindSignals, Regions } from "../types/index";
+import { Regions } from "../types/index";
 import { extractRegionsFromBlock } from "./area-parser";
 
-export const extractSignals = (text: string): WindSignals => {
+export const extractSignals = (text: string): { [key: string]: Regions } => {
   const signals: { [key: string]: Regions } = {};
   const tcwsMatch = text.match(PATTERNS.tcws);
 
   if (!tcwsMatch) {
-    return { signals };
+    return signals;
   }
 
   const tcwsSection = tcwsMatch[1];
@@ -29,7 +29,7 @@ export const extractSignals = (text: string): WindSignals => {
     }
   }
 
-  return { signals };
+  return signals;
 };
 
 export const extractSignalBlocks = (tcwsSection: string): string[] => {

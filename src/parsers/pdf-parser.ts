@@ -198,13 +198,16 @@ export const parsePdfFromBuffer = async (
   try {
     const data = await pdf(buffer);
     const meta = extractMeta(data.text);
-    const signals = extractSignals(data.text);
+    const signalsMap = extractSignals(data.text);
+    const signalsArray = Object.keys(signalsMap)
+      .map((k) => ({ level: Number(k), regions: signalsMap[k].regions }))
+      .sort((a, b) => a.level - b.level);
 
     return {
       ...meta,
       cyclone: {
         ...meta.cyclone,
-        signals: signals.signals,
+        signals: signalsArray,
       },
     };
   } catch (error) {
