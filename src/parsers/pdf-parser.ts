@@ -187,7 +187,7 @@ const extractMeta = (text: string) => {
     cyclone: {
       name: names?.[2] || null,
       internationalName: names?.[3] || null,
-      signals: {} as any,
+      signals: [],
     },
   };
 };
