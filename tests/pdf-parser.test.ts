@@ -3,35 +3,35 @@ import { z } from "zod";
 import { join } from "path";
 import parseTcbPdf from "../src/index";
 
+const nullableString = z.string().nullable();
+
 const AreaSchema = z.object({
   name: z.string(),
   parts: z.array(z.string()).optional(),
   locals: z.array(z.string()).optional(),
 });
 
-const WindSignalSchema = z.record(
-  z.string(),
-  z.object({
-    regions: z.object({
-      luzon: z.array(AreaSchema),
-      visayas: z.array(AreaSchema),
-      mindanao: z.array(AreaSchema),
-    }),
-  })
-);
+const CycloneSignalSchema = z.object({
+  level: z.number(),
+  regions: z.object({
+    luzon: z.array(AreaSchema),
+    visayas: z.array(AreaSchema),
+    mindanao: z.array(AreaSchema),
+  }),
+});
 
 const BulletinSchema = z.object({
-  title: z.string().optional(),
-  subtitle: z.string().optional(),
-  description: z.string().optional(),
-  dateIssued: z.string().optional(),
-  dateIssuedISO: z.string().optional(),
-  dateValidUntil: z.string().optional(),
-  dateValidUntilISO: z.string().optional(),
+  title: nullableString,
+  subtitle: nullableString,
+  description: nullableString,
+  dateIssued: nullableString,
+  dateIssuedISO: nullableString,
+  dateValidUntil: nullableString,
+  dateValidUntilISO: nullableString,
   cyclone: z.object({
-    name: z.string().optional(),
-    internationalName: z.string().optional(),
-    signals: WindSignalSchema,
+    name: nullableString,
+    internationalName: nullableString,
+    signals: z.array(CycloneSignalSchema),
   }),
 });
 

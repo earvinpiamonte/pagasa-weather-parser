@@ -1,12 +1,6 @@
 import { promises as fs } from "fs";
 import { parsePdfFromBuffer } from "./parsers/pdf-parser";
-import {
-  WindSignals,
-  Regions,
-  Area,
-  BulletinData,
-  CycloneInfo,
-} from "./types/index";
+import { Regions, Area, BulletinData, CycloneInfo } from "./types/index";
 
 export interface ParsedTcbPdfPromise extends Promise<BulletinData> {
   jsonStringified(space?: number | string): Promise<string>;
@@ -38,7 +32,7 @@ export { parseTcbPdf };
 
 export default parseTcbPdf;
 
-export { WindSignals, Regions, Area, BulletinData, CycloneInfo };
+export { Regions, Area, BulletinData, CycloneInfo };
 
 module.exports = parseTcbPdf;
 module.exports.parseTcbPdf = parseTcbPdf;

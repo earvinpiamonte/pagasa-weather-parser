@@ -12,24 +12,28 @@ export interface Regions {
   };
 }
 
-export interface WindSignals {
-  signals: {
-    [key: string]: Regions;
+export interface CycloneSignal {
+  level: number;
+  regions: {
+    luzon: Area[];
+    visayas: Area[];
+    mindanao: Area[];
   };
 }
 
-export interface CycloneInfo extends WindSignals {
-  name?: string;
-  internationalName?: string;
+export interface CycloneInfo {
+  name: string | null;
+  internationalName: string | null;
+  signals: CycloneSignal[];
 }
 
 export interface BulletinData {
-  title?: string;
-  subtitle?: string;
-  description?: string;
-  dateIssued?: string;
-  dateIssuedISO?: string;
-  dateValidUntil?: string;
-  dateValidUntilISO?: string;
+  title: string | null;
+  subtitle: string | null;
+  description: string | null;
+  dateIssued: string | null;
+  dateIssuedISO: string | null;
+  dateValidUntil: string | null;
+  dateValidUntilISO: string | null;
   cyclone: CycloneInfo;
 }

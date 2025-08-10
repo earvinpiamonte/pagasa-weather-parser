@@ -27,8 +27,12 @@ const toISO = (
 };
 
 const extractMeta = (text: string) => {
-  const title = text.match(PATTERNS.bulletinTitle)?.[1];
-  const subtitle = text.match(PATTERNS.bulletinSubtitle)?.[1];
+  const title =
+    text.match(PATTERNS.bulletinTitle)?.[1] ||
+    text.match(PATTERNS.advisoryTitle)?.[1];
+  const subtitle =
+    text.match(PATTERNS.bulletinSubtitle)?.[1] ||
+    text.match(PATTERNS.plainCycloneClassification)?.[0];
   const names = text.match(PATTERNS.cycloneNames);
   const issued = text.match(PATTERNS.issued);
   const valid = text.match(PATTERNS.validUntil);
@@ -121,7 +125,8 @@ const extractMeta = (text: string) => {
           /^[A-Z0-9 “”"'(),.-]+$/.test(line) && /[A-Z]/.test(line);
 
         if (!capturing) {
-          const cycloneNameFromSubtitle = subtitle?.match(/[“"']?([A-Z]{3,})/)?.[1];
+          const cycloneNameFromSubtitle =
+            subtitle?.match(/[“"']?([A-Z]{3,})/)?.[1];
           const dynamicPatternParts = [
             "WEAKENS",
             "INTENSIFIES",
@@ -172,16 +177,17 @@ const extractMeta = (text: string) => {
   }
 
   return {
-    title,
-    subtitle,
-    description,
-    dateIssued,
-    dateIssuedISO,
-    dateValidUntil,
-    dateValidUntilISO,
+    title: title || null,
+    subtitle: subtitle || null,
+    description: description || null,
+    dateIssued: dateIssued || null,
+    dateIssuedISO: dateIssuedISO || null,
+    dateValidUntil: dateValidUntil || null,
+    dateValidUntilISO: dateValidUntilISO || null,
     cyclone: {
-      name: names?.[2],
-      internationalName: names?.[3],
+      name: names?.[2] || null,
+      internationalName: names?.[3] || null,
+      signals: [],
     },
   };
 };
@@ -192,13 +198,16 @@ export const parsePdfFromBuffer = async (
   try {
     const data = await pdf(buffer);
     const meta = extractMeta(data.text);
-    const signals = extractSignals(data.text);
+    const signalsMap = extractSignals(data.text);
+    const signalsArray = Object.keys(signalsMap)
+      .map((k) => ({ level: Number(k), regions: signalsMap[k].regions }))
+      .sort((a, b) => a.level - b.level);
 
     return {
       ...meta,
       cyclone: {
         ...meta.cyclone,
-        signals: signals.signals,
+        signals: signalsArray,
       },
     };
   } catch (error) {

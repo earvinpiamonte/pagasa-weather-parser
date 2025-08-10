@@ -16,8 +16,12 @@ const DIR_GROUP = DIRECTIONS.join("|");
 export const PATTERNS = {
   tcws: /TROPICAL CYCLONE WIND SIGNALS.*?IN EFFECT(.*?)(?=OTHER HAZARDS|HAZARDS AFFECTING|$)/s,
   bulletinTitle: /(TROPICAL\s+CYCLONE\s+BULLETIN\s+NR\.\s*\d+[A-Z]?)/i,
+  advisoryTitle: /(TROPICAL\s+CYCLONE\s+ADVISORY\s+NR\.\s*\d+[A-Z]?)/i,
   bulletinSubtitle:
     /(Tropical\s+Storm\s+[A-Z]+\s*\([^)]*\)|Typhoon\s+[A-Z]+\s*\([^)]*\)|Severe\s+Tropical\s+Storm\s+[A-Z]+\s*\([^)]*\)|Low\s+Pressure\s+Area\s*\([^)]*\))/i,
+  // Classification header without trailing parentheses
+  plainCycloneClassification:
+    /(Tropical\s+Storm|Severe\s+Tropical\s+Storm|Typhoon)\s+[A-Z]{3,}(?!\s*\()/i,
   cycloneNames:
     /\b(Tropical\s+Storm|Typhoon|Severe\s+Tropical\s+Storm)\s+([A-Z]+)\s*\(([^)]+)\)/i,
   issued:
