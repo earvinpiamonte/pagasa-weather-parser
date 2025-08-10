@@ -177,16 +177,17 @@ const extractMeta = (text: string) => {
   }
 
   return {
-    title,
-    subtitle,
-    description,
-    dateIssued,
-    dateIssuedISO,
-    dateValidUntil,
-    dateValidUntilISO,
+    title: title || null,
+    subtitle: subtitle || null,
+    description: description || null,
+    dateIssued: dateIssued || null,
+    dateIssuedISO: dateIssuedISO || null,
+    dateValidUntil: dateValidUntil || null,
+    dateValidUntilISO: dateValidUntilISO || null,
     cyclone: {
-      name: names?.[2],
-      internationalName: names?.[3],
+      name: names?.[2] || null,
+      internationalName: names?.[3] || null,
+      signals: {} as any,
     },
   };
 };
