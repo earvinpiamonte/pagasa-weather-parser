@@ -27,8 +27,12 @@ const toISO = (
 };
 
 const extractMeta = (text: string) => {
-  const title = text.match(PATTERNS.bulletinTitle)?.[1];
-  const subtitle = text.match(PATTERNS.bulletinSubtitle)?.[1];
+  const title =
+    text.match(PATTERNS.bulletinTitle)?.[1] ||
+    text.match(PATTERNS.advisoryTitle)?.[1];
+  const subtitle =
+    text.match(PATTERNS.bulletinSubtitle)?.[1] ||
+    text.match(PATTERNS.plainCycloneClassification)?.[0];
   const names = text.match(PATTERNS.cycloneNames);
   const issued = text.match(PATTERNS.issued);
   const valid = text.match(PATTERNS.validUntil);
@@ -121,7 +125,8 @@ const extractMeta = (text: string) => {
           /^[A-Z0-9 “”"'(),.-]+$/.test(line) && /[A-Z]/.test(line);
 
         if (!capturing) {
-          const cycloneNameFromSubtitle = subtitle?.match(/[“"']?([A-Z]{3,})/)?.[1];
+          const cycloneNameFromSubtitle =
+            subtitle?.match(/[“"']?([A-Z]{3,})/)?.[1];
           const dynamicPatternParts = [
             "WEAKENS",
             "INTENSIFIES",
