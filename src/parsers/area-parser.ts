@@ -51,7 +51,7 @@ export const extractTcwsAreaText = (block: string): string => {
     }
 
     if (signalFound && !collecting) {
-      const cleanedCandidate = line.replace(/\s*-\s*$/, "");
+      const cleanedCandidate = line.replace(PATTERNS.trailingDash, "");
 
       const lower = cleanedCandidate.toLowerCase();
 
@@ -72,7 +72,7 @@ export const extractTcwsAreaText = (block: string): string => {
         continue;
       }
 
-      const cleaned = line.replace(/\s*-\s*$/, "");
+      const cleaned = line.replace(PATTERNS.trailingDash, "");
 
       if (!cleaned) {
         continue;
