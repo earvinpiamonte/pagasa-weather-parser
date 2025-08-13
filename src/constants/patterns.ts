@@ -47,6 +47,8 @@ export const PATTERNS = {
   parentheses: /\(([^)]+)\)/g,
   cleanExtra: /\s*-\s*-?\s*$/,
   normalizeSpace: /\s+/g,
+  trailingDash: /\s*-\s*$/,
+  dashOnly: /^-+$/,
   // skip generic metadata/noise lines commonly found in headers/footers
   skipMetadata:
     /^\s*\d+\s*$|bulletin|tropical|storm|issued|valid|broadcast|prepared|checked|tracking|weather|flood|forecasting|tel|senator|website|brgy|philippines|republic|department|science|technology|pagasa|atmospheric|geophysical|astronomical|services|administration|division|page\s+\d+/i,
@@ -56,4 +58,5 @@ export const PATTERNS = {
   regionHeading: /^\s*(Luzon|Visayas|Mindanao)\s*[:\-]?\s*$/i,
   // keywords that often appear around area listings
   areaLineKeywords: /(portion\s+of|rest\s+of|mainland|islands?)/i,
+  areaFiller: /^(?:winds|(?:strong|gale-force|storm-force)(?:\s+winds?)?)$/i,
 } as const;
