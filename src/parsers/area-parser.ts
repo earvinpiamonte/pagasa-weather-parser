@@ -38,6 +38,13 @@ export const extractTcwsAreaText = (block: string): string => {
       continue;
     }
 
+    if (PATTERNS.tcwsNumber.test(line)) {
+      signalFound = true;
+      collecting = false;
+
+      continue;
+    }
+
     if (/warning lead time/i.test(line)) {
       if (collecting) {
         break;
@@ -51,7 +58,9 @@ export const extractTcwsAreaText = (block: string): string => {
     }
 
     if (signalFound && !collecting) {
-      const cleanedCandidate = line.replace(PATTERNS.trailingDash, "");
+      const cleanedCandidate = line
+        .replace(PATTERNS.trailingMultipleDash, "")
+        .replace(PATTERNS.trailingDash, "");
 
       const lower = cleanedCandidate.toLowerCase();
 
@@ -152,29 +161,31 @@ export const containsAreaNames = (line: string): boolean => {
   if (PATTERNS.skipMetadata.test(line) || PATTERNS.skipLine.test(line)) {
     return false;
   }
+  // Clean trailing placeholder dash columns (e.g. "Batanes - -" -> "Batanes") often present in tabular TCWS listings
+  const cleanedLine = line.replace(/\s+(?:-\s*){1,3}$/g, "").trim();
 
-  const lower = line.toLowerCase();
+  const lower = cleanedLine.toLowerCase();
 
   if (PATTERNS.areaFiller.test(lower)) {
     return false;
   }
 
   // Area lines often contain commas/and-separated phrases with optional portion/rest/mainland keywords, e.g. "northern portion of Cagayan, Ilocos Norte and Abra"
-  const hasListDelimiters = /,|;|\band\b/i.test(line);
+  const hasListDelimiters = /,|;|\band\b/i.test(cleanedLine);
 
-  const hasAreaKeywords = PATTERNS.areaLineKeywords.test(line);
+  const hasAreaKeywords = PATTERNS.areaLineKeywords.test(cleanedLine);
 
   // Starts with a known signal header is already filtered. Keep lines with title-case words and avoid all-caps metadata
   const looksLikeProperNouns =
-    /\b[A-Z][a-z'’\-]+(?:\s+[A-Z][a-z'’\-]+)*\b/.test(line) ||
-    /\b[A-Z]{3,}\b/.test(line);
+    /\b[A-Z][a-z'’\-]+(?:\s+[A-Z][a-z'’\-]+)*\b/.test(cleanedLine) ||
+    /\b[A-Z]{3,}\b/.test(cleanedLine);
 
   // Additionally accept a single proper noun possibly with parenthetical qualifier (e.g., "Batanes (Itbayat)")
   const singleIslandPattern = /^[A-Z][A-Za-z'’\-]+(?:\s+\([A-Za-z'’\-]+\))?$/;
 
   return (
     ((hasListDelimiters || hasAreaKeywords) && looksLikeProperNouns) ||
-    singleIslandPattern.test(line)
+    singleIslandPattern.test(cleanedLine)
   );
 };
 
