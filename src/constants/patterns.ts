@@ -48,6 +48,7 @@ export const PATTERNS = {
   cleanExtra: /\s*-\s*-?\s*$/,
   normalizeSpace: /\s+/g,
   trailingDash: /\s*-\s*$/,
+  trailingMultipleDash: /\s+(?:-\s*){1,3}$/g,
   dashOnly: /^-+$/,
   // skip generic metadata/noise lines commonly found in headers/footers
   skipMetadata:

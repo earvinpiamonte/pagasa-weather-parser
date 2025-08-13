@@ -59,7 +59,7 @@ export const extractTcwsAreaText = (block: string): string => {
 
     if (signalFound && !collecting) {
       const cleanedCandidate = line
-        .replace(/\s+(?:-\s*){1,3}$/g, "")
+        .replace(PATTERNS.trailingMultipleDash, "")
         .replace(PATTERNS.trailingDash, "");
 
       const lower = cleanedCandidate.toLowerCase();
