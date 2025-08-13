@@ -56,4 +56,5 @@ export const PATTERNS = {
   regionHeading: /^\s*(Luzon|Visayas|Mindanao)\s*[:\-]?\s*$/i,
   // keywords that often appear around area listings
   areaLineKeywords: /(portion\s+of|rest\s+of|mainland|islands?)/i,
+  areaFiller: /^(?:winds|(?:strong|gale-force|storm-force)(?:\s+winds?)?)$/i,
 } as const;

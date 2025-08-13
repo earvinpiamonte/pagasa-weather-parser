@@ -38,8 +38,11 @@ export const extractTcwsAreaText = (block: string): string => {
       continue;
     }
 
-    if (line.includes("Warning lead time")) {
-      collecting = false;
+    if (/warning lead time/i.test(line)) {
+      if (collecting) {
+        break;
+      }
+
       continue;
     }
 
@@ -47,11 +50,39 @@ export const extractTcwsAreaText = (block: string): string => {
       continue;
     }
 
-    if (signalFound && !collecting && containsAreaNames(line)) {
-      collecting = true;
-      areaText = line;
+    if (signalFound && !collecting) {
+      const cleanedCandidate = line.replace(/\s*-\s*$/, "");
+
+      const lower = cleanedCandidate.toLowerCase();
+
+      if (PATTERNS.areaFiller.test(lower)) {
+        continue;
+      }
+
+      if (containsAreaNames(cleanedCandidate)) {
+        collecting = true;
+        areaText = cleanedCandidate;
+      }
     } else if (collecting) {
-      areaText += " " + line;
+      if (
+        /^-+$/.test(line) ||
+        line === "-" ||
+        PATTERNS.areaFiller.test(line.toLowerCase())
+      ) {
+        continue;
+      }
+
+      const cleaned = line.replace(/\s*-\s*$/, "");
+
+      if (!cleaned) {
+        continue;
+      }
+
+      if (PATTERNS.signalNumber.test(cleaned)) {
+        break;
+      }
+
+      areaText += " " + cleaned;
     }
   }
 
@@ -76,35 +107,35 @@ export const parseAreasText = (text: string): Area[] => {
 export const mergeAreas = (areas: Area[]): Area[] => {
   const merged = new Map<string, Area>();
 
+  const mergeUnique = (
+    target: string[] | undefined,
+    incoming: string[] | undefined
+  ): string[] | undefined => {
+    if (!incoming || incoming.length === 0) {
+      return target;
+    }
+
+    if (!target) {
+      return [...incoming];
+    }
+
+    for (const item of incoming) {
+      if (!target.includes(item)) {
+        target.push(item);
+      }
+    }
+
+    return target;
+  };
+
   for (const area of areas) {
     const key = area.name.toLowerCase();
 
     if (merged.has(key)) {
       const existing = merged.get(key)!;
 
-      if (area.parts) {
-        if (!existing.parts) {
-          existing.parts = [...area.parts];
-        } else {
-          for (const part of area.parts) {
-            if (!existing.parts.includes(part)) {
-              existing.parts.push(part);
-            }
-          }
-        }
-      }
-
-      if (area.locals) {
-        if (!existing.locals) {
-          existing.locals = [...area.locals];
-        } else {
-          for (const local of area.locals) {
-            if (!existing.locals.includes(local)) {
-              existing.locals.push(local);
-            }
-          }
-        }
-      }
+      existing.parts = mergeUnique(existing.parts, area.parts);
+      existing.locals = mergeUnique(existing.locals, area.locals);
     } else {
       merged.set(key, {
         name: area.name,
@@ -122,6 +153,12 @@ export const containsAreaNames = (line: string): boolean => {
     return false;
   }
 
+  const lower = line.toLowerCase();
+
+  if (PATTERNS.areaFiller.test(lower)) {
+    return false;
+  }
+
   // Area lines often contain commas/and-separated phrases with optional portion/rest/mainland keywords, e.g. "northern portion of Cagayan, Ilocos Norte and Abra"
   const hasListDelimiters = /,|;|\band\b/i.test(line);
 
@@ -132,8 +169,13 @@ export const containsAreaNames = (line: string): boolean => {
     /\b[A-Z][a-z'’\-]+(?:\s+[A-Z][a-z'’\-]+)*\b/.test(line) ||
     /\b[A-Z]{3,}\b/.test(line);
 
-  // Consider a line an area line if it has list delimiters or area keywords and looks like it contains proper nouns.
-  return (hasListDelimiters || hasAreaKeywords) && looksLikeProperNouns;
+  // Additionally accept a single proper noun possibly with parenthetical qualifier (e.g., "Batanes (Itbayat)")
+  const singleIslandPattern = /^[A-Z][A-Za-z'’\-]+(?:\s+\([A-Za-z'’\-]+\))?$/;
+
+  return (
+    ((hasListDelimiters || hasAreaKeywords) && looksLikeProperNouns) ||
+    singleIslandPattern.test(line)
+  );
 };
 
 export const parseArea = (areaText: string): Area | null => {
