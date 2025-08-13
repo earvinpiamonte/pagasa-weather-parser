@@ -65,7 +65,7 @@ export const extractTcwsAreaText = (block: string): string => {
       }
     } else if (collecting) {
       if (
-        /^-+$/.test(line) ||
+        PATTERNS.dashOnly.test(line) ||
         line === "-" ||
         PATTERNS.areaFiller.test(line.toLowerCase())
       ) {

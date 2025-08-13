@@ -48,6 +48,7 @@ export const PATTERNS = {
   cleanExtra: /\s*-\s*-?\s*$/,
   normalizeSpace: /\s+/g,
   trailingDash: /\s*-\s*$/,
+  dashOnly: /^-+$/,
   // skip generic metadata/noise lines commonly found in headers/footers
   skipMetadata:
     /^\s*\d+\s*$|bulletin|tropical|storm|issued|valid|broadcast|prepared|checked|tracking|weather|flood|forecasting|tel|senator|website|brgy|philippines|republic|department|science|technology|pagasa|atmospheric|geophysical|astronomical|services|administration|division|page\s+\d+/i,
