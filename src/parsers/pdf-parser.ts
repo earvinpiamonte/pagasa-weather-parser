@@ -185,7 +185,10 @@ const extractMeta = (text: string) => {
     dateValidUntil: dateValidUntil || null,
     dateValidUntilISO: dateValidUntilISO || null,
     cyclone: {
-      name: names?.[2] || null,
+      name:
+        names?.[2] ||
+        subtitle?.match(/Tropical\s+Depression\s+([A-Z]{3,})/i)?.[1] ||
+        null,
       internationalName: names?.[3] || null,
       signals: [],
     },
