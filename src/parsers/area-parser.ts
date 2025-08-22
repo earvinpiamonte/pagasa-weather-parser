@@ -237,7 +237,9 @@ export const parseArea = (areaText: string): Area | null => {
   let islands: string[] = [];
 
   // allow common punctuation after 'including' (e.g. 'including:', 'including -', 'including;')
-  const includingMatch = workingArea.match(/\bincluding\b[\s:;,\-\u2013\u2014]*(.+)$/i);
+  const includingMatch = workingArea.match(
+    /\bincluding\b[\s:;,\-\u2013\u2014]*(.+)$/i
+  );
 
   if (includingMatch) {
     // preserve original 'and' replacement then split on commas or 'and' separators
