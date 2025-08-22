@@ -236,7 +236,8 @@ export const parseArea = (areaText: string): Area | null => {
   // Handle "including" lists, e.g. "Cagayan including Babuyan Islands"
   let islands: string[] = [];
 
-  const includingMatch = workingArea.match(/\bincluding\b\s*(.+)$/i);
+  // allow common punctuation after 'including' (e.g. 'including:', 'including -', 'including;')
+  const includingMatch = workingArea.match(/\bincluding\b[\s:;,\-\u2013\u2014]*(.+)$/i);
 
   if (includingMatch) {
     const listText = includingMatch[1]
