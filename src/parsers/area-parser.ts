@@ -145,11 +145,13 @@ export const mergeAreas = (areas: Area[]): Area[] => {
 
       existing.parts = mergeUnique(existing.parts, area.parts);
       existing.locals = mergeUnique(existing.locals, area.locals);
+      existing.islands = mergeUnique(existing.islands, area.islands);
     } else {
       merged.set(key, {
         name: area.name,
         parts: area.parts ? [...area.parts] : undefined,
         locals: area.locals ? [...area.locals] : undefined,
+        islands: area.islands ? [...area.islands] : undefined,
       });
     }
   }
@@ -231,9 +233,30 @@ export const parseArea = (areaText: string): Area | null => {
   // Clean remaining portion text
   workingArea = workingArea.replace(PATTERNS.cleanPortion, "");
 
+  // Handle "including" lists, e.g. "Cagayan including Babuyan Islands"
+  let islands: string[] = [];
+
+  const includingMatch = workingArea.match(/\bincluding\b\s*(.+)$/i);
+
+  if (includingMatch) {
+    const listText = includingMatch[1]
+      .replace(/\band\b/gi, ",")
+      .split(/,/)
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+
+    islands = listText;
+
+    workingArea = workingArea.replace(includingMatch[0], "").trim();
+  }
+
   const { name, municipalities } = extractMunicipalities(workingArea);
 
   const result: Area = { name: name.trim() };
+
+  if (islands.length > 0) {
+    result.islands = islands;
+  }
 
   if (partDescriptors.length > 0) {
     result.parts = partDescriptors;
