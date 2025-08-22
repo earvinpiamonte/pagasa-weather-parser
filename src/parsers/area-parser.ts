@@ -240,9 +240,10 @@ export const parseArea = (areaText: string): Area | null => {
   const includingMatch = workingArea.match(/\bincluding\b[\s:;,\-\u2013\u2014]*(.+)$/i);
 
   if (includingMatch) {
+    // preserve original 'and' replacement then split on commas or 'and' separators
     const listText = includingMatch[1]
       .replace(/\band\b/gi, ",")
-      .split(/,/)
+      .split(/\s*,\s*|\s+and\s+/i)
       .map((s) => s.trim())
       .filter((s) => s.length > 0);
 
