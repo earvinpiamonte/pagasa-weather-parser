@@ -2,6 +2,7 @@ export interface Area {
   name: string;
   parts?: string[];
   locals?: string[];
+  islands?: string[];
 }
 
 export interface Regions {
