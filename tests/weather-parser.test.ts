@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "fs";
 import { z } from "zod";
 import { join } from "path";
-import parseTcbPdf from "../src/index";
+import parseWeatherPdf from "../src/index";
 
 const nullableString = z.string().nullable();
 
@@ -35,10 +35,10 @@ const BulletinSchema = z.object({
   }),
 });
 
-describe("parseTcb", () => {
+describe("parseWeatherPdf", () => {
   const pdfDirectory = join(__dirname, "data");
   const pdfFiles = readdirSync(pdfDirectory).filter((file) =>
-    file.endsWith(".pdf")
+    file.endsWith(".pdf"),
   );
 
   pdfFiles.forEach((file) => {
@@ -47,7 +47,7 @@ describe("parseTcb", () => {
 
       describe("standard parsing (without chaining)", () => {
         it("should parse from a file path and return a valid WindSignals object", async () => {
-          const result = await parseTcbPdf(testFilePath);
+          const result = await parseWeatherPdf(testFilePath);
 
           const validation = BulletinSchema.safeParse(result);
 
@@ -57,7 +57,7 @@ describe("parseTcb", () => {
         it("should parse from a buffer and return a valid WindSignals object", async () => {
           const buffer = readFileSync(testFilePath);
 
-          const result = await parseTcbPdf(buffer);
+          const result = await parseWeatherPdf(buffer);
 
           const validation = BulletinSchema.safeParse(result);
 
@@ -67,7 +67,8 @@ describe("parseTcb", () => {
 
       describe("chaining with .jsonStringified()", () => {
         it("should parse from a file path and return a valid JSON string", async () => {
-          const jsonOutput = await parseTcbPdf(testFilePath).jsonStringified();
+          const jsonOutput =
+            await parseWeatherPdf(testFilePath).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -83,7 +84,7 @@ describe("parseTcb", () => {
         it("should parse from a buffer and return a valid JSON string", async () => {
           const buffer = readFileSync(testFilePath);
 
-          const jsonOutput = await parseTcbPdf(buffer).jsonStringified();
+          const jsonOutput = await parseWeatherPdf(buffer).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -97,7 +98,8 @@ describe("parseTcb", () => {
         });
 
         it("should allow custom spacing for the JSON output", async () => {
-          const jsonOutput = await parseTcbPdf(testFilePath).jsonStringified(4);
+          const jsonOutput =
+            await parseWeatherPdf(testFilePath).jsonStringified(4);
 
           const lines = jsonOutput.split("\n");
 
@@ -113,29 +115,29 @@ describe("parseTcb", () => {
 
   describe("error handling", () => {
     it("should throw a synchronous error for invalid input type", () => {
-      expect(() => parseTcbPdf(123 as any)).toThrow(
-        "Invalid input: expected string (file path) or Buffer"
+      expect(() => parseWeatherPdf(123 as any)).toThrow(
+        "Invalid input: expected string (file path) or Buffer",
       );
     });
 
     it("should reject for a non-existent file", async () => {
-      await expect(parseTcbPdf("/non/existent/file.pdf")).rejects.toThrow(
-        "ENOENT: no such file or directory, open '/non/existent/file.pdf'"
+      await expect(parseWeatherPdf("/non/existent/file.pdf")).rejects.toThrow(
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
     it("should reject for an invalid buffer", async () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
-      await expect(parseTcbPdf(invalidBuffer)).rejects.toThrow(
-        "Invalid PDF structure"
+      await expect(parseWeatherPdf(invalidBuffer)).rejects.toThrow(
+        "Invalid PDF structure",
       );
     });
 
     it("should reject the .jsonStringified() chain if the core promise fails", async () => {
       await expect(
-        parseTcbPdf("/non/existent/file.pdf").jsonStringified()
+        parseWeatherPdf("/non/existent/file.pdf").jsonStringified(),
       ).rejects.toThrow(
-        "ENOENT: no such file or directory, open '/non/existent/file.pdf'"
+        "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
   });

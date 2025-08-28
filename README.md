@@ -1,14 +1,14 @@
-# `pagasa-tcb-parser`
+# `pagasa-weather-parser`
 
-[![npm version](https://img.shields.io/npm/v/@earvinpiamonte/pagasa-tcb-parser.svg)](https://www.npmjs.com/package/@earvinpiamonte/pagasa-tcb-parser)
-[![Tests](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/earvinpiamonte/pagasa-tcb-parser/actions/workflows/tests.yml)
+[![npm version](https://img.shields.io/npm/v/@earvinpiamonte/pagasa-weather-parser.svg)](https://www.npmjs.com/package/@earvinpiamonte/pagasa-weather-parser)
+[![Tests](https://github.com/earvinpiamonte/pagasa-weather-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/earvinpiamonte/pagasa-weather-parser/actions/workflows/tests.yml)
 
-A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB) and advisory (TCA) PDF files.
+A TypeScript library for parsing [PAGASA](https://www.pagasa.dost.gov.ph/) (Philippine Atmospheric, Geophysical and Astronomical Services Administration) tropical cyclone bulletin (TCB), tropical cyclone advisory (TCA), and weather advisory PDF files.
 
 ## Installation
 
 ```bash
-npm i @earvinpiamonte/pagasa-tcb-parser
+npm i @earvinpiamonte/pagasa-weather-parser
 ```
 
 ## Usage
@@ -16,10 +16,10 @@ npm i @earvinpiamonte/pagasa-tcb-parser
 ### Basic
 
 ```javascript
-import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser";
+import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
 
 async function run() {
-  const bulletin = await parseTcbPdf("/path/to/TCB#16_emong.pdf");
+  const bulletin = await parseWeatherPdf("/path/to/TCB#16_emong.pdf");
 
   console.log(bulletin);
 }
@@ -31,15 +31,15 @@ run();
 #### Using async/ await
 
 ```javascript
-import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser";
+import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
 
 const run = async () => {
   try {
-    const bulletin = await parseTcbPdf("/path/to/TCB#16_emong.pdf");
+    const bulletin = await parseWeatherPdf("/path/to/TCB#16_emong.pdf");
 
     console.log(bulletin);
   } catch (error) {
-    console.error("Failed to parse TCB:", error.message);
+    console.error("Failed to parse PDF:", error.message);
   }
 };
 
@@ -49,14 +49,14 @@ run();
 #### Using Promises with `.then().catch()`
 
 ```javascript
-import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser";
+import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
 
-parseTcbPdf("/path/to/TCB#16_emong.pdf")
+parseWeatherPdf("/path/to/TCB#16_emong.pdf")
   .then((bulletin) => {
     console.log(bulletin);
   })
   .catch((error) => {
-    console.error("Failed to parse TCB:", error.message);
+    console.error("Failed to parse PDF:", error.message);
   });
 ```
 
@@ -64,7 +64,7 @@ parseTcbPdf("/path/to/TCB#16_emong.pdf")
 
 ```javascript
 import express from "express";
-import parseTcbPdf from "@earvinpiamonte/pagasa-tcb-parser";
+import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
 
 const app = express();
 
@@ -76,16 +76,16 @@ app.get("/your/api/get-tcb", async (req, res) => {
 
     const buffer = await response.buffer();
 
-    const bulletin = await parseTcbPdf(buffer);
+    const bulletin = await parseWeatherPdf(buffer);
 
     res.json(bulletin);
   } catch (error) {
-    res.status(500).json({ error: "Failed to parse TCB" });
+    res.status(500).json({ error: "Failed to parse PDF" });
   }
 });
 ```
 
-> [!NOTE] > `parseTcbPdf` supports both file path (string) and Buffer input.
+> [!NOTE] > `parseWeatherPdf` supports both file path (string) and Buffer input.
 
 ### Example output
 
@@ -155,19 +155,19 @@ The package exports a single function that can handle both file paths and buffer
 
 | Function/Method            | Parameters                                                 | Returns               | Description                                                         |
 | -------------------------- | ---------------------------------------------------------- | --------------------- | ------------------------------------------------------------------- |
-| `parseTcbPdf(input)`       | `input`: `string` or `Buffer`                              | `ParsedTcbPdfPromise` | Parses a PDF from a file path or buffer.                            |
+| `parseWeatherPdf(input)`       | `input`: `string` or `Buffer`                              | `ParsedWeatherPdfPromise` | Parses a PDF from a file path or buffer.                            |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>`     | A chainable method that returns the parsed result as a JSON string. |
 
 #### Function Signature
 
 ```typescript
-import { ParsedTcbPdfPromise } from "@earvinpiamonte/pagasa-tcb-parser";
+import { ParsedWeatherPdfPromise } from "@earvinpiamonte/pagasa-weather-parser";
 
 /**
- * Parses a PAGASA TCB PDF from a file path or Buffer.
- * Returns a ParsedTcbPdfPromise: a Promise<BulletinData>.
+ * Parses a PAGASA Weather PDF from a file path or Buffer.
+ * Returns a ParsedWeatherPdfPromise: a Promise<BulletinData>.
  */
-declare function parseTcbPdf(input: string | Buffer): ParsedTcbPdfPromise;
+declare function parseWeatherPdf(input: string | Buffer): ParsedWeatherPdfPromise;
 ```
 
 ## Development
@@ -176,24 +176,24 @@ declare function parseTcbPdf(input: string | Buffer): ParsedTcbPdfPromise;
 
 This package is written in TypeScript and includes type definitions.
 
-> **Note:** The package exports the `ParsedTcbPdfPromise` type for advanced typing, which extends `Promise<BulletinData>` with a `.jsonStringified()` method.
+> **Note:** The package exports the `ParsedWeatherPdfPromise` type for advanced typing, which extends `Promise<BulletinData>` with a `.jsonStringified()` method.
 
 ```typescript
-import parseTcbPdf, {
-  ParsedTcbPdfPromise,
+import parseWeatherPdf, {
+  ParsedWeatherPdfPromise,
   BulletinData,
   Regions,
   Area,
   CycloneInfo,
-} from "@earvinpiamonte/pagasa-tcb-parser";
+} from "@earvinpiamonte/pagasa-weather-parser";
 
 // Option 1: Keep the promise (for chaining .jsonStringified later)
-const promise: ParsedTcbPdfPromise = parseTcbPdf("/path/to/file.pdf");
+const promise: ParsedWeatherPdfPromise = parseWeatherPdf("/path/to/file.pdf");
 const bulletin: BulletinData = await promise; // resolved value
 const jsonResult: string = await promise.jsonStringified();
 
 // Option 2: Direct await (no need to store promise separately)
-const bulletin2: BulletinData = await parseTcbPdf("/path/to/another.pdf");
+const bulletin2: BulletinData = await parseWeatherPdf("/path/to/another.pdf");
 
 // Access signal data (array)
 const signalNumberOne = bulletin.cyclone.signals[0]?.level; // number | undefined
@@ -220,7 +220,7 @@ This project uses [Jest](https://jestjs.io) for testing.
 Make sure you have the dependencies installed:
 
 ```bash
-cd pagasa-tcb-parser/
+cd pagasa-weather-parser/
 ```
 
 ```bash

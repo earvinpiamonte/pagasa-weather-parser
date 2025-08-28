@@ -1,7 +1,7 @@
 {
-  "name": "@earvinpiamonte/pagasa-tcb-parser",
+  "name": "@earvinpiamonte/pagasa-weather-parser",
   "version": "2.0.4",
-  "description": "A TypeScript library for parsing PAGASA weather bulletin PDF files",
+  "description": "A TypeScript library for parsing PAGASA weather bulletin and advisory PDF files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -19,21 +19,23 @@
     "pdf",
     "parser",
     "typhoon",
-    "tropical-cyclone"
+    "tropical-cyclone",
+    "advisory"
   ],
   "author": "Noel Earvin Piamonte",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/earvinpiamonte/pagasa-tcb-parser.git"
+    "url": "git+https://github.com/earvinpiamonte/pagasa-weather-parser.git"
   },
   "bugs": {
-    "url": "https://github.com/earvinpiamonte/pagasa-tcb-parser/issues"
+    "url": "https://github.com/earvinpiamonte/pagasa-weather-parser/issues"
   },
-  "homepage": "https://github.com/earvinpiamonte/pagasa-tcb-parser#readme",
+  "homepage": "https://github.com/earvinpiamonte/pagasa-weather-parser#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^20.0.0",
+    "@types/pdf-parse": "^1.1.5",
     "jest": "^30.0.5",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
