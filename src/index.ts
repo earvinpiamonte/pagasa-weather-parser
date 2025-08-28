@@ -2,11 +2,11 @@ import { promises as fs } from "fs";
 import { parsePdfFromBuffer } from "./parsers/pdf-parser";
 import { Regions, Area, BulletinData, CycloneInfo } from "./types/index";
 
-export interface ParsedTcbPdfPromise extends Promise<BulletinData> {
+export interface ParsedWeatherPdfPromise extends Promise<BulletinData> {
   jsonStringified(space?: number | string): Promise<string>;
 }
 
-const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
+const parseWeatherPdf = (input: string | Buffer): ParsedWeatherPdfPromise => {
   if (typeof input !== "string" && !Buffer.isBuffer(input)) {
     throw new Error("Invalid input: expected string (file path) or Buffer");
   }
@@ -17,7 +17,7 @@ const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
     return await parsePdfFromBuffer(buffer);
   })();
 
-  const result = corePromise as ParsedTcbPdfPromise;
+  const result = corePromise as ParsedWeatherPdfPromise;
 
   result.jsonStringified = async (space: number | string = 2) => {
     const data = await corePromise;
@@ -28,12 +28,12 @@ const parseTcbPdf = (input: string | Buffer): ParsedTcbPdfPromise => {
   return result;
 };
 
-export { parseTcbPdf };
+export { parseWeatherPdf };
 
-export default parseTcbPdf;
+export default parseWeatherPdf;
 
 export { Regions, Area, BulletinData, CycloneInfo };
 
-module.exports = parseTcbPdf;
-module.exports.parseTcbPdf = parseTcbPdf;
-module.exports.default = parseTcbPdf;
+module.exports = parseWeatherPdf;
+module.exports.parseWeatherPdf = parseWeatherPdf;
+module.exports.default = parseWeatherPdf;
