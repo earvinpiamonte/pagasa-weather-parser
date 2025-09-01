@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from "fs";
 import { z } from "zod";
 import { join } from "path";
-import parseWeatherPdf from "../src/index";
+import parseTropicalCyclonePdf from "../src/index";
 
 const nullableString = z.string().nullable();
 
@@ -35,7 +35,7 @@ const BulletinSchema = z.object({
   }),
 });
 
-describe("parseWeatherPdf", () => {
+describe("parseTropicalCyclonePdf", () => {
   const pdfDirectory = join(__dirname, "data");
   const pdfFiles = readdirSync(pdfDirectory).filter((file) =>
     file.endsWith(".pdf"),
@@ -47,7 +47,7 @@ describe("parseWeatherPdf", () => {
 
       describe("standard parsing (without chaining)", () => {
         it("should parse from a file path and return a valid WindSignals object", async () => {
-          const result = await parseWeatherPdf(testFilePath);
+          const result = await parseTropicalCyclonePdf(testFilePath);
 
           const validation = BulletinSchema.safeParse(result);
 
@@ -57,7 +57,7 @@ describe("parseWeatherPdf", () => {
         it("should parse from a buffer and return a valid WindSignals object", async () => {
           const buffer = readFileSync(testFilePath);
 
-          const result = await parseWeatherPdf(buffer);
+          const result = await parseTropicalCyclonePdf(buffer);
 
           const validation = BulletinSchema.safeParse(result);
 
@@ -68,7 +68,7 @@ describe("parseWeatherPdf", () => {
       describe("chaining with .jsonStringified()", () => {
         it("should parse from a file path and return a valid JSON string", async () => {
           const jsonOutput =
-            await parseWeatherPdf(testFilePath).jsonStringified();
+            await parseTropicalCyclonePdf(testFilePath).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -84,7 +84,7 @@ describe("parseWeatherPdf", () => {
         it("should parse from a buffer and return a valid JSON string", async () => {
           const buffer = readFileSync(testFilePath);
 
-          const jsonOutput = await parseWeatherPdf(buffer).jsonStringified();
+          const jsonOutput = await parseTropicalCyclonePdf(buffer).jsonStringified();
 
           expect(typeof jsonOutput).toBe("string");
 
@@ -99,7 +99,7 @@ describe("parseWeatherPdf", () => {
 
         it("should allow custom spacing for the JSON output", async () => {
           const jsonOutput =
-            await parseWeatherPdf(testFilePath).jsonStringified(4);
+            await parseTropicalCyclonePdf(testFilePath).jsonStringified(4);
 
           const lines = jsonOutput.split("\n");
 
@@ -115,27 +115,27 @@ describe("parseWeatherPdf", () => {
 
   describe("error handling", () => {
     it("should throw a synchronous error for invalid input type", () => {
-      expect(() => parseWeatherPdf(123 as any)).toThrow(
+      expect(() => parseTropicalCyclonePdf(123 as any)).toThrow(
         "Invalid input: expected string (file path) or Buffer",
       );
     });
 
     it("should reject for a non-existent file", async () => {
-      await expect(parseWeatherPdf("/non/existent/file.pdf")).rejects.toThrow(
+      await expect(parseTropicalCyclonePdf("/non/existent/file.pdf")).rejects.toThrow(
         "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );
     });
     it("should reject for an invalid buffer", async () => {
       const invalidBuffer = Buffer.from("not a pdf");
 
-      await expect(parseWeatherPdf(invalidBuffer)).rejects.toThrow(
+      await expect(parseTropicalCyclonePdf(invalidBuffer)).rejects.toThrow(
         "Invalid PDF structure",
       );
     });
 
     it("should reject the .jsonStringified() chain if the core promise fails", async () => {
       await expect(
-        parseWeatherPdf("/non/existent/file.pdf").jsonStringified(),
+        parseTropicalCyclonePdf("/non/existent/file.pdf").jsonStringified(),
       ).rejects.toThrow(
         "ENOENT: no such file or directory, open '/non/existent/file.pdf'",
       );

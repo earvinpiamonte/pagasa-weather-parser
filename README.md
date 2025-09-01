@@ -16,10 +16,10 @@ npm i @earvinpiamonte/pagasa-weather-parser
 ### Basic
 
 ```javascript
-import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
+import parseTropicalCyclonePdf from "@earvinpiamonte/pagasa-weather-parser";
 
 async function run() {
-  const bulletin = await parseWeatherPdf("/path/to/TCB#16_emong.pdf");
+  const bulletin = await parseTropicalCyclonePdf("/path/to/TCB#16_emong.pdf");
 
   console.log(bulletin);
 }
@@ -31,11 +31,11 @@ run();
 #### Using async/ await
 
 ```javascript
-import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
+import parseTropicalCyclonePdf from "@earvinpiamonte/pagasa-weather-parser";
 
 const run = async () => {
   try {
-    const bulletin = await parseWeatherPdf("/path/to/TCB#16_emong.pdf");
+    const bulletin = await parseTropicalCyclonePdf("/path/to/TCB#16_emong.pdf");
 
     console.log(bulletin);
   } catch (error) {
@@ -49,9 +49,9 @@ run();
 #### Using Promises with `.then().catch()`
 
 ```javascript
-import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
+import parseTropicalCyclonePdf from "@earvinpiamonte/pagasa-weather-parser";
 
-parseWeatherPdf("/path/to/TCB#16_emong.pdf")
+parseTropicalCyclonePdf("/path/to/TCB#16_emong.pdf")
   .then((bulletin) => {
     console.log(bulletin);
   })
@@ -64,7 +64,7 @@ parseWeatherPdf("/path/to/TCB#16_emong.pdf")
 
 ```javascript
 import express from "express";
-import parseWeatherPdf from "@earvinpiamonte/pagasa-weather-parser";
+import parseTropicalCyclonePdf from "@earvinpiamonte/pagasa-weather-parser";
 
 const app = express();
 
@@ -76,7 +76,7 @@ app.get("/your/api/get-tcb", async (req, res) => {
 
     const buffer = await response.buffer();
 
-    const bulletin = await parseWeatherPdf(buffer);
+    const bulletin = await parseTropicalCyclonePdf(buffer);
 
     res.json(bulletin);
   } catch (error) {
@@ -85,7 +85,7 @@ app.get("/your/api/get-tcb", async (req, res) => {
 });
 ```
 
-> [!NOTE] > `parseWeatherPdf` supports both file path (string) and Buffer input.
+> [!NOTE] > `parseTropicalCyclonePdf` supports both file path (string) and Buffer input.
 
 ### Example output
 
@@ -155,19 +155,19 @@ The package exports a single function that can handle both file paths and buffer
 
 | Function/Method            | Parameters                                                 | Returns               | Description                                                         |
 | -------------------------- | ---------------------------------------------------------- | --------------------- | ------------------------------------------------------------------- |
-| `parseWeatherPdf(input)`       | `input`: `string` or `Buffer`                              | `ParsedWeatherPdfPromise` | Parses a PDF from a file path or buffer.                            |
+| `parseTropicalCyclonePdf(input)`       | `input`: `string` or `Buffer`                              | `ParsedTropicalCyclonePdfPromise` | Parses a PDF from a file path or buffer.                            |
 | `.jsonStringified(space?)` | `space?`: `number` or `string` (optional, defaults to `2`) | `Promise<string>`     | A chainable method that returns the parsed result as a JSON string. |
 
 #### Function Signature
 
 ```typescript
-import { ParsedWeatherPdfPromise } from "@earvinpiamonte/pagasa-weather-parser";
+import { ParsedTropicalCyclonePdfPromise } from "@earvinpiamonte/pagasa-weather-parser";
 
 /**
  * Parses a PAGASA Weather PDF from a file path or Buffer.
- * Returns a ParsedWeatherPdfPromise: a Promise<BulletinData>.
+ * Returns a ParsedTropicalCyclonePdfPromise: a Promise<BulletinData>.
  */
-declare function parseWeatherPdf(input: string | Buffer): ParsedWeatherPdfPromise;
+declare function parseTropicalCyclonePdf(input: string | Buffer): ParsedTropicalCyclonePdfPromise;
 ```
 
 ## Development
@@ -176,11 +176,11 @@ declare function parseWeatherPdf(input: string | Buffer): ParsedWeatherPdfPromis
 
 This package is written in TypeScript and includes type definitions.
 
-> **Note:** The package exports the `ParsedWeatherPdfPromise` type for advanced typing, which extends `Promise<BulletinData>` with a `.jsonStringified()` method.
+> **Note:** The package exports the `ParsedTropicalCyclonePdfPromise` type for advanced typing, which extends `Promise<BulletinData>` with a `.jsonStringified()` method.
 
 ```typescript
-import parseWeatherPdf, {
-  ParsedWeatherPdfPromise,
+import parseTropicalCyclonePdf, {
+  ParsedTropicalCyclonePdfPromise,
   BulletinData,
   Regions,
   Area,
@@ -188,12 +188,12 @@ import parseWeatherPdf, {
 } from "@earvinpiamonte/pagasa-weather-parser";
 
 // Option 1: Keep the promise (for chaining .jsonStringified later)
-const promise: ParsedWeatherPdfPromise = parseWeatherPdf("/path/to/file.pdf");
+const promise: ParsedTropicalCyclonePdfPromise = parseTropicalCyclonePdf("/path/to/file.pdf");
 const bulletin: BulletinData = await promise; // resolved value
 const jsonResult: string = await promise.jsonStringified();
 
 // Option 2: Direct await (no need to store promise separately)
-const bulletin2: BulletinData = await parseWeatherPdf("/path/to/another.pdf");
+const bulletin2: BulletinData = await parseTropicalCyclonePdf("/path/to/another.pdf");
 
 // Access signal data (array)
 const signalNumberOne = bulletin.cyclone.signals[0]?.level; // number | undefined
@@ -237,7 +237,7 @@ npm test
 
 The tests are located in the `tests/` directory and include the ff:
 
-- **Unit Tests**: `tests/pdf-parser.test.ts` - Tests the core PDF parsing functionality
+- **Unit Tests**: `tests/weather-parser.test.ts` - Tests the core PDF parsing functionality
 - **Test Data**: `tests/data/` - Contains sample PAGASA TCB PDF files for testing
 
 #### Test Data

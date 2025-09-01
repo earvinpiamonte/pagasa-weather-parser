@@ -1,5 +1,5 @@
 import { join } from "path";
-import parseWeatherPdf from "../src/index";
+import parseTropicalCyclonePdf from "../src/index";
 
 const expected = {
   title: "TROPICAL CYCLONE BULLETIN NR. 5",
@@ -49,7 +49,7 @@ const expected = {
 describe("snapshot: TCB#5_isang.pdf", () => {
   it("matches the expected parsed structure exactly", async () => {
     const filePath = join(__dirname, "data", "TCB#5_isang.pdf");
-    const result = await parseWeatherPdf(filePath);
+    const result = await parseTropicalCyclonePdf(filePath);
 
     const sanitize = (value: any): any => {
       if (Array.isArray(value)) return value.map(sanitize);
