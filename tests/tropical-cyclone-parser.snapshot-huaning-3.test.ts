@@ -1,5 +1,5 @@
 import { join } from "path";
-import parseWeatherPdf from "../src/index";
+import parseTropicalCyclonePdf from "../src/index";
 
 const expected = {
   title: "TROPICAL CYCLONE BULLETIN NR. 3",
@@ -21,7 +21,7 @@ describe("snapshot: TCB#3_huaning.pdf", () => {
   it("matches the expected parsed structure exactly", async () => {
     const filePath = join(__dirname, "data", "TCB#3_huaning.pdf");
 
-    const result = await parseWeatherPdf(filePath);
+    const result = await parseTropicalCyclonePdf(filePath);
 
     expect(result).toStrictEqual(expected);
   });
