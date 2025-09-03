@@ -237,7 +237,7 @@ npm test
 
 The tests are located in the `tests/` directory and include the ff:
 
-- **Unit Tests**: `tests/weather-parser.test.ts` - Tests the core PDF parsing functionality
+- **Unit Tests**: `tests/tropical-cyclone-parser.test.ts` - Tests the core PDF parsing functionality
 - **Test Data**: `tests/data/` - Contains sample PAGASA TCB PDF files for testing
 
 #### Test Data
