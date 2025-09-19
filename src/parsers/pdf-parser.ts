@@ -100,6 +100,8 @@ const extractMeta = (text: string) => {
 
       const descriptionLines: string[] = [];
 
+      const sectionBoundary = PATTERNS.sectionBoundary;
+
       for (const line of linesAfterSubtitle) {
         if (!line) {
           continue;
@@ -122,9 +124,13 @@ const extractMeta = (text: string) => {
         }
 
         const isUpper =
-          /^[A-Z0-9 “”"'(),.-]+$/.test(line) && /[A-Z]/.test(line);
+          /^[A-Z0-9 “”"'(),.:-\u2013\u2014]+$/.test(line) && /[A-Z]/.test(line);
 
         if (!capturing) {
+          if (sectionBoundary.test(line)) {
+            break;
+          }
+
           const cycloneNameFromSubtitle =
             subtitle?.match(/[“"']?([A-Z]{3,})/)?.[1];
           const dynamicPatternParts = [
@@ -157,6 +163,10 @@ const extractMeta = (text: string) => {
             descriptionLines.push(line.replace(/\s+/g, " ").trim());
           }
         } else {
+          if (sectionBoundary.test(line)) {
+            break;
+          }
+
           if (isUpper) {
             descriptionLines.push(line.replace(/\s+/g, " ").trim());
             continue;
@@ -171,7 +181,15 @@ const extractMeta = (text: string) => {
       }
 
       if (descriptionLines.length) {
-        description = descriptionLines.join(" ");
+        let joined = descriptionLines.join(" ").replace(/\s+/g, " ").trim();
+
+        const firstPeriod = joined.indexOf(".");
+
+        if (firstPeriod !== -1) {
+          joined = joined.slice(0, firstPeriod + 1);
+        }
+
+        description = joined;
       }
     }
   }

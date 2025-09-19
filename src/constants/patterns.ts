@@ -68,4 +68,7 @@ export const PATTERNS = {
   // keywords that often appear around area listings
   areaLineKeywords: /(portion\s+of|rest\s+of|mainland|islands?)/i,
   areaFiller: /^(?:winds|(?:strong|gale-force|storm-force)(?:\s+winds?)?)$/i,
+  // section boundary markers to stop capturing the headline/description
+  sectionBoundary:
+    /^(Location\s+of\s+the?\s*Center|Location\s+of\s+Center|Center\s+Location|Location\b|Intensity\b|Movement\b|Track\b|FORECAST\b|Forecast\b|Hazards\b|Other\s+Hazards\b|TROPICAL\s+CYCLONE\s+WIND\s+SIGNALS)/i,
 } as const;
