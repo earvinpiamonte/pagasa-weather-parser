@@ -6,9 +6,11 @@ export const splitPreservingParentheses = (text: string): string[] => {
   let parenthesesDepth = 0;
   let i = 0;
 
+  const AND_DELIMITER = " and ";
+
   while (i < text.length) {
     const char = text[i];
-    const nextChars = text.slice(i, i + 5).toLowerCase();
+    const nextChars = text.slice(i, i + AND_DELIMITER.length).toLowerCase();
 
     if (char === "(") {
       parenthesesDepth++;
@@ -22,13 +24,26 @@ export const splitPreservingParentheses = (text: string): string[] => {
       }
 
       current = "";
-    } else if (parenthesesDepth === 0 && nextChars === " and ") {
-      if (current.trim()) {
-        result.push(current.trim());
+    } else if (parenthesesDepth === 0 && nextChars === AND_DELIMITER) {
+      // Check if this "and" is connecting parts of the same area or different areas
+      // Look ahead to see if there's "portion" or "portions" after "and"
+
+      const restOfText = text.slice(i + AND_DELIMITER.length);
+
+      const isConnectingPortions = PATTERNS.connectingPortions.test(restOfText);
+
+      if (isConnectingPortions) {
+        current += " and ";
+      } else {
+        if (current.trim()) {
+          result.push(current.trim());
+        }
+
+        current = "";
       }
 
-      current = "";
-      i += 4;
+      // Skip past the delimiter
+      i += AND_DELIMITER.length - 1; // -1 because the main loop will increment i
     } else {
       current += char;
     }

@@ -201,11 +201,25 @@ export const parseArea = (areaText: string): Area | null => {
   const partDescriptors: string[] = [];
   let workingArea = cleanArea;
 
-  // Extract portion patterns
-  const portionMatch = workingArea.match(PATTERNS.portionPattern);
-  if (portionMatch) {
-    partDescriptors.push(portionMatch[2].toLowerCase());
-    workingArea = portionMatch[3];
+  // Handle complex patterns like "the northern and central portions of Aurora"
+  const multiPortionMatch = workingArea.match(PATTERNS.multiPortionPattern);
+
+  if (multiPortionMatch) {
+    if (multiPortionMatch[2]) {
+      partDescriptors.push(multiPortionMatch[2].toLowerCase());
+    }
+
+    partDescriptors.push(multiPortionMatch[3].toLowerCase());
+
+    workingArea = multiPortionMatch[4];
+  } else {
+    const portionMatch = workingArea.match(PATTERNS.portionPattern);
+
+    if (portionMatch) {
+      partDescriptors.push(portionMatch[2].toLowerCase());
+
+      workingArea = portionMatch[3];
+    }
   }
 
   // Handle "rest of" and "mainland"

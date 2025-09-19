@@ -38,11 +38,19 @@ export const PATTERNS = {
     `^(the\\s+)?(${DIR_GROUP})\\s+portion\\s+of\\s+(.+)$`, // e.g. "northern portion of Cagayan"
     "i"
   ),
+  // Pattern to match multi-portion patterns like "the northern and central portions of Aurora"
+  multiPortionPattern:
+    /^(the\s+)?(?:(\w+)\s+and\s+)?(\w+)\s+portions?\s+of\s+(.+)$/i,
   restPattern: /^(the\s+)?rest\s+of\s+/i,
   additionalPortion: new RegExp(`\\b(${DIR_GROUP})\\b`, "gi"),
   cleanPortion: new RegExp(
     `\\b(${DIR_GROUP})(\\s+portion\\s+of\\s+|\\s+)`,
     "gi"
+  ),
+  // Pattern to detect when "and" connects portions of the same area (e.g., "northern and central portions of Aurora")
+  connectingPortions: new RegExp(
+    `^\\s*(${DIR_GROUP}|rest\\s+of)\\s+(portion|portions?)\\s+of\\s+`,
+    "i"
   ),
   parentheses: /\(([^)]+)\)/g,
   cleanExtra: /\s*-\s*-?\s*$/,
