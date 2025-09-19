@@ -23,11 +23,24 @@ export const splitPreservingParentheses = (text: string): string[] => {
 
       current = "";
     } else if (parenthesesDepth === 0 && nextChars === " and ") {
-      if (current.trim()) {
-        result.push(current.trim());
+      // Check if this "and" is connecting parts of the same area or different areas
+      // Look ahead to see if there's "portion" or "portions" after "and"
+
+      const restOfText = text.slice(i + 5);
+
+      const isConnectingPortions = PATTERNS.connectingPortions.test(restOfText);
+
+      if (isConnectingPortions) {
+        current += " and ";
+      } else {
+        if (current.trim()) {
+          result.push(current.trim());
+        }
+
+        current = "";
       }
 
-      current = "";
+      // Skip past " and"
       i += 4;
     } else {
       current += char;
