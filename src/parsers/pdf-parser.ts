@@ -124,7 +124,8 @@ const extractMeta = (text: string) => {
         }
 
         const isUpper =
-          /^[A-Z0-9 “”"'(),.:-\u2013\u2014]+$/.test(line) && /[A-Z]/.test(line);
+          PATTERNS.headlineUpperChars.test(line) &&
+          PATTERNS.hasUpperAlpha.test(line);
 
         if (!capturing) {
           if (sectionBoundary.test(line)) {

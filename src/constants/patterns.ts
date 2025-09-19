@@ -71,4 +71,7 @@ export const PATTERNS = {
   // section boundary markers to stop capturing the headline/description
   sectionBoundary:
     /^(Location\s+of\s+the?\s*Center|Location\s+of\s+Center|Center\s+Location|Location\b|Intensity\b|Movement\b|Track\b|FORECAST\b|Forecast\b|Hazards\b|Other\s+Hazards\b|TROPICAL\s+CYCLONE\s+WIND\s+SIGNALS)/i,
+  // Headline/description line detection: allow uppercase text with punctuation incl. en/em dashes
+  headlineUpperChars: /^[A-Z0-9 “”"'(),.:-\u2013\u2014]+$/,
+  hasUpperAlpha: /[A-Z]/,
 } as const;
