@@ -8,8 +8,8 @@ const expected = {
     "“ISANG” HAS EMERGED OVER THE SEA WEST OF ILOCOS REGION AND IS NOW TRAVERSING THE WEST PHILIPPINE SEA.",
   dateIssued: "August 22, 2025 11:00 PM",
   dateIssuedISO: "2025-08-22T15:00:00.000Z",
-  dateValidUntil: null,
-  dateValidUntilISO: null,
+  dateValidUntil: "August 23, 2025 5:00 AM",
+  dateValidUntilISO: "2025-08-22T21:00:00.000Z",
   cyclone: {
     name: "ISANG",
     internationalName: null,
