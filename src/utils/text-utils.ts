@@ -58,6 +58,10 @@ export const splitPreservingParentheses = (text: string): string[] => {
   return result.filter((segment) => segment.length > 0);
 };
 
+export const normalizeLocationName = (name: string): string => {
+  return name.trim().replace(/\.+$/, "");
+};
+
 export const extractMunicipalities = (
   areaText: string
 ): {
@@ -72,18 +76,19 @@ export const extractMunicipalities = (
   while ((match = PATTERNS.parentheses.exec(areaText)) !== null) {
     const munis = match[1]
       .split(",")
-      .map((m) => m.trim())
+      .map((m) => normalizeLocationName(m))
       .filter((m) => m.length > 0 && !/^\d+$/.test(m));
 
     municipalities.push(...munis);
   }
 
-  const cleanName = areaText
-    .replace(/\s*\([^)]*\)/g, "")
-    .replace(PATTERNS.cleanExtra, "")
-    .replace(PATTERNS.restPattern, "")
-    .replace(/^the\s+/i, "")
-    .trim();
+  const cleanName = normalizeLocationName(
+    areaText
+      .replace(/\s*\([^)]*\)/g, "")
+      .replace(PATTERNS.cleanExtra, "")
+      .replace(PATTERNS.restPattern, "")
+      .replace(/^the\s+/i, "")
+  );
 
   return { name: cleanName, municipalities };
 };
