@@ -84,13 +84,13 @@ const extractMeta = (text: string) => {
       const issuedDate = new Date(dateIssuedISO);
       const tomorrowDate = new Date(issuedDate);
 
-      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      tomorrowDate.setUTCDate(tomorrowDate.getUTCDate() + 1);
 
-      const tomorrowDateString = tomorrowDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'Asia/Manila'
+      const tomorrowDateString = tomorrowDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "Asia/Manila",
       });
 
       dateValidUntil = `${tomorrowDateString} ${time} ${meridian}`;
