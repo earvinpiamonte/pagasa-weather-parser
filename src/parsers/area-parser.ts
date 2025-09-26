@@ -3,6 +3,7 @@ import { Area } from "../types/index";
 import {
   splitPreservingParentheses,
   extractMunicipalities,
+  normalizeLocationName,
 } from "../utils/text-utils";
 
 export const extractRegionsFromBlock = (
@@ -260,7 +261,7 @@ export const parseArea = (areaText: string): Area | null => {
     const listText = includingMatch[1]
       .replace(/\band\b/gi, ",")
       .split(/\s*,\s*|\s+and\s+/i)
-      .map((s) => s.trim())
+      .map((s) => normalizeLocationName(s))
       .filter((s) => s.length > 0);
 
     islands = listText;
@@ -270,7 +271,7 @@ export const parseArea = (areaText: string): Area | null => {
 
   const { name, municipalities } = extractMunicipalities(workingArea);
 
-  const result: Area = { name: name.trim() };
+  const result: Area = { name: normalizeLocationName(name) };
 
   if (islands.length > 0) {
     result.islands = islands;
