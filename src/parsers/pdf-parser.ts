@@ -65,6 +65,7 @@ const extractMeta = (text: string) => {
 
   if (!valid) {
     const validTodayTimeMatch = text.match(PATTERNS.validTodayTime);
+    const validTomorrowTimeMatch = text.match(PATTERNS.validTomorrowTime);
 
     if (validTodayTimeMatch && dateIssued) {
       // Reuse issued date's date part (Month Day, Year)
@@ -77,6 +78,24 @@ const extractMeta = (text: string) => {
         dateValidUntil = `${datePart} ${time} ${meridian}`;
         dateValidUntilISO = toISO(datePart, time, meridian);
       }
+    } else if (validTomorrowTimeMatch && dateIssuedISO) {
+      const time = validTomorrowTimeMatch[1];
+      const meridian = validTomorrowTimeMatch[2];
+      const issuedDate = new Date(dateIssuedISO);
+      const tomorrowDate = new Date(issuedDate);
+
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+
+      const tomorrowDateString = tomorrowDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'Asia/Manila'
+      });
+
+      dateValidUntil = `${tomorrowDateString} ${time} ${meridian}`;
+
+      dateValidUntilISO = toISO(tomorrowDateString, time, meridian);
     }
   }
 

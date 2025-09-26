@@ -31,6 +31,7 @@ export const PATTERNS = {
   issuedAlt:
     /Issued\s+at\s+(\d{1,2}:\d{2})\s*(AM|PM),\s*(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/i, // time first then day Month Year
   validTodayTime: /Valid[^\n]*?at\s+(\d{1,2}:\d{2})\s*(AM|PM)\s+today\.?/i,
+  validTomorrowTime: /Valid[^\n]*?at\s+(\d{1,2}:\d{2})\s*(AM|PM)\s+tomorrow\.?/i,
   signalNumber: /^[12345]\s*$/,
   tcwsNumber: /TCWS\s+No\.\s*([12345])/i,
   signalMatch: /^\s*([12345])\s*$/m,
