@@ -53,7 +53,7 @@ const expected = {
             { name: "Kalinga" },
             { name: "Mountain Province" },
             {
-              name: "and portions Ifugao",
+              name: "Ifugao",
               parts: ["eastern", "central"],
               locals: [
                 "Alfonso Lista",
