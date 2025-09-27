@@ -272,7 +272,7 @@ export const parseArea = (areaText: string): Area | null => {
   }
 
   // Handle "and portions" patterns that weren't caught by multi-portion patterns
-  workingArea = workingArea.replace(/\s*and\s+portions?\s*/gi, " ");
+  workingArea = workingArea.replace(PATTERNS.andPortions, " ");
 
   // Extract additional portion descriptors
   const additionalMatch = workingArea.match(PATTERNS.additionalPortion);

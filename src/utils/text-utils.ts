@@ -88,7 +88,7 @@ export const extractMunicipalities = (
       .replace(PATTERNS.cleanExtra, "")
       .replace(PATTERNS.restPattern, "")
       .replace(/^the\s+/i, "")
-      .replace(/\s*and\s+portions?\s*/gi, " ")
+      .replace(PATTERNS.andPortions, " ")
       .replace(/\s+/g, " ")
   );
 

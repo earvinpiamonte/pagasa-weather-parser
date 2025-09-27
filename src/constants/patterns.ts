@@ -82,4 +82,6 @@ export const PATTERNS = {
   // Headline/description line detection: allow uppercase text with punctuation incl. en/em dashes
   headlineUpperChars: /^[A-Z0-9 “”"'(),.:-\u2013\u2014]+$/,
   hasUpperAlpha: /[A-Z]/,
+  // Pattern to remove "and portion(s)" connectors
+  andPortions: /\s*and\s+portions?\s*/gi,
 } as const;
