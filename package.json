@@ -1,6 +1,6 @@
 {
   "name": "@earvinpiamonte/pagasa-weather-parser",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "A TypeScript library for parsing PAGASA weather bulletin and advisory PDF files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
