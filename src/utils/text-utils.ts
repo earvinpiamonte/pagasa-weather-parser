@@ -62,6 +62,18 @@ export const normalizeLocationName = (name: string): string => {
   return name.trim().replace(/\.+$/, "");
 };
 
+export const fixCommonSpelling = (text: string): string => {
+  if (!text || typeof text !== "string") {
+    return text;
+  }
+
+  let corrected = text;
+
+  corrected = corrected.replace(/portionp\s+of\b/gi, "portion of");
+
+  return corrected;
+};
+
 export const extractMunicipalities = (
   areaText: string
 ): {

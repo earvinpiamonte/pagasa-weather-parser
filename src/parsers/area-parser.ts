@@ -4,6 +4,7 @@ import {
   splitPreservingParentheses,
   extractMunicipalities,
   normalizeLocationName,
+  fixCommonSpelling,
 } from "../utils/text-utils";
 
 export const extractRegionsFromBlock = (
@@ -24,7 +25,9 @@ export const extractRegionsFromBlock = (
 };
 
 export const extractTcwsAreaText = (block: string): string => {
-  const lines = block
+  const correctedBlock = fixCommonSpelling(block);
+
+  const lines = correctedBlock
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.length > 0);
@@ -132,7 +135,9 @@ export const extractTcwsAreaText = (block: string): string => {
 };
 
 export const parseAreasText = (text: string): Area[] => {
-  const cleanText = text
+  const correctedText = fixCommonSpelling(text);
+
+  const cleanText = correctedText
     .replace(PATTERNS.normalizeSpace, " ")
     .replace(/([,;])\s+and\s+/g, "$1 ")
     .trim();
