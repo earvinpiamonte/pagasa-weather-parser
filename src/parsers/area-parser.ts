@@ -92,17 +92,17 @@ export const extractTcwsAreaText = (block: string): string => {
         break;
       }
 
-      const hasOpenParen = cleaned.includes("(") && !cleaned.includes(")");
+      const openParenCount = (cleaned.match(/\(/g) || []).length;
 
-      const hasCloseParen = cleaned.includes(")") && !cleaned.includes("(");
+      const closeParenCount = (cleaned.match(/\)/g) || []).length;
 
       const isOnlyText = /^[A-Za-z\s,]+$/.test(cleaned.trim());
 
-      if (hasOpenParen) {
-        // This line starts parentheses but doesn't close them, definitely a continuation
+      if (openParenCount > closeParenCount) {
+        // More opening than closing parentheses, likely a continuation
         areaText += " " + cleaned;
-      } else if (hasCloseParen) {
-        // This line closes parentheses, definitely the end of a continuation
+      } else if (closeParenCount > openParenCount) {
+        // More closing than opening parentheses, likely the end of a continuation
         areaText += " " + cleaned;
       } else if (isOnlyText && areaText.trim().length > 0) {
         // This line contains only letters, spaces, and commas and we already have area text
