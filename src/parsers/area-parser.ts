@@ -92,7 +92,36 @@ export const extractTcwsAreaText = (block: string): string => {
         break;
       }
 
-      areaText += " " + cleaned;
+      const openParenCount = (cleaned.match(/\(/g) || []).length;
+
+      const closeParenCount = (cleaned.match(/\)/g) || []).length;
+
+      const isOnlyText = /^[A-Za-z\s,]+$/.test(cleaned.trim());
+
+      if (openParenCount > closeParenCount) {
+        // More opening than closing parentheses, likely a continuation
+        areaText += " " + cleaned;
+      } else if (closeParenCount > openParenCount) {
+        // More closing than opening parentheses, likely the end of a continuation
+        areaText += " " + cleaned;
+      } else if (isOnlyText && areaText.trim().length > 0) {
+        // This line contains only letters, spaces, and commas and we already have area text
+        // Check if the previous area text ends with an opening parenthesis
+        const lastChar = areaText.trim().slice(-1);
+
+        if (lastChar === "(" || areaText.trim().endsWith(",")) {
+          areaText += " " + cleaned;
+        } else {
+          // This might be a new area, but let's be more conservative and include it
+          areaText += " " + cleaned;
+        }
+      } else if (isOnlyText) {
+        // This line contains only letters, spaces, and commas - likely a continuation
+        areaText += " " + cleaned;
+      } else {
+        // This might be a new area or end of current area
+        areaText += " " + cleaned;
+      }
     }
   }
 
@@ -193,7 +222,10 @@ export const containsAreaNames = (line: string): boolean => {
 };
 
 export const parseArea = (areaText: string): Area | null => {
-  const cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
+  let cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
+
+  // Remove "Typhoon force winds", "Storm force winds", "Gale force winds" prefixes
+  cleanArea = cleanArea.replace(PATTERNS.typhoonForceWinds, "");
 
   if (!cleanArea || cleanArea.length < 3) {
     return null;
@@ -203,14 +235,20 @@ export const parseArea = (areaText: string): Area | null => {
   let workingArea = cleanArea;
 
   // Handle complex patterns like "the northern and central portions of Aurora"
-  const multiPortionMatch = workingArea.match(PATTERNS.multiPortionPattern);
+  let multiPortionMatch = workingArea.match(PATTERNS.multiPortionPattern);
+
+  if (!multiPortionMatch) {
+    multiPortionMatch = workingArea.match(PATTERNS.multiPortionPatternAlt);
+  }
 
   if (multiPortionMatch) {
     if (multiPortionMatch[2]) {
       partDescriptors.push(multiPortionMatch[2].toLowerCase());
     }
 
-    partDescriptors.push(multiPortionMatch[3].toLowerCase());
+    if (multiPortionMatch[3]) {
+      partDescriptors.push(multiPortionMatch[3].toLowerCase());
+    }
 
     workingArea = multiPortionMatch[4];
   } else {
