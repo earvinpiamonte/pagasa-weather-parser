@@ -84,7 +84,7 @@ export const extractMunicipalities = (
 
   // Normalize "Isl" to "Island" for municipalities
   const normalizedMunicipalities = municipalities.map((municipality) => {
-    return municipality.replace(/\bIsl\b$/, "Island");
+    return municipality.replace(/\bIsl\s*$/, "Island");
   });
 
   const cleanName = normalizeLocationName(
