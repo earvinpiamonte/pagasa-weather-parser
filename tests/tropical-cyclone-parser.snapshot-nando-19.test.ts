@@ -211,7 +211,7 @@ const expected = {
             {
               name: "Babuyan Islands",
               parts: ["northeastern"],
-              locals: ["Babuyan Isl", "Didicas Isl"],
+              locals: ["Babuyan Island", "Didicas Island"],
             },
           ],
           visayas: [],
