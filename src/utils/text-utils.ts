@@ -89,6 +89,7 @@ export const extractMunicipalities = (
       .replace(PATTERNS.restPattern, "")
       .replace(/^the\s+/i, "")
       .replace(/\s*and\s+portions?\s*/gi, " ")
+      .replace(/\s+/g, " ")
   );
 
   return { name: cleanName, municipalities };
