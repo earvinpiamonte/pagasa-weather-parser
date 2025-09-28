@@ -1,4 +1,9 @@
 import { PATTERNS } from "../constants/patterns";
+import {
+  LUZON_PROVINCES,
+  VISAYAS_PROVINCES,
+  MINDANAO_PROVINCES,
+} from "../constants/regions";
 import { Area } from "../types/index";
 import {
   splitPreservingParentheses,
@@ -6,6 +11,34 @@ import {
   normalizeLocationName,
   fixCommonSpelling,
 } from "../utils/text-utils";
+
+const classifyAreaByRegion = (area: Area): "luzon" | "visayas" | "mindanao" => {
+  const areaName = area.name.toLowerCase();
+
+  const exactMatch = (provinces: string[]) => {
+    const sortedProvinces = [...provinces].sort((a, b) => b.length - a.length);
+
+    return sortedProvinces.some((province) => {
+      const escapedProvince = province.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(`\\b${escapedProvince}\\b`, "i");
+      return regex.test(areaName);
+    });
+  };
+
+  if (exactMatch(LUZON_PROVINCES)) {
+    return "luzon";
+  }
+
+  if (exactMatch(VISAYAS_PROVINCES)) {
+    return "visayas";
+  }
+
+  if (exactMatch(MINDANAO_PROVINCES)) {
+    return "mindanao";
+  }
+
+  return "luzon";
+};
 
 export const extractRegionsFromBlock = (
   block: string
@@ -16,12 +49,20 @@ export const extractRegionsFromBlock = (
 } => {
   const rawAreaText = extractTcwsAreaText(block);
   const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
+  const mergedAreas = mergeAreas(parsedAreas);
 
-  return {
-    luzon: mergeAreas(parsedAreas),
-    visayas: [],
-    mindanao: [],
+  const regions = {
+    luzon: [] as Area[],
+    visayas: [] as Area[],
+    mindanao: [] as Area[],
   };
+
+  for (const area of mergedAreas) {
+    const region = classifyAreaByRegion(area);
+    regions[region].push(area);
+  }
+
+  return regions;
 };
 
 export const extractTcwsAreaText = (block: string): string => {
@@ -227,7 +268,10 @@ export const containsAreaNames = (line: string): boolean => {
 };
 
 export const parseArea = (areaText: string): Area | null => {
-  let cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
+  let cleanArea = areaText
+    .trim()
+    .replace(PATTERNS.leadingDash, "")
+    .replace(PATTERNS.cleanExtra, "");
 
   // Remove "Typhoon force winds", "Storm force winds", "Gale force winds" prefixes
   cleanArea = cleanArea.replace(PATTERNS.typhoonForceWinds, "");
