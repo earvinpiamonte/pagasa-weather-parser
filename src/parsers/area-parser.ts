@@ -15,15 +15,22 @@ import {
 const classifyAreaByRegion = (area: Area): "luzon" | "visayas" | "mindanao" => {
   const areaName = area.name.toLowerCase();
 
-  if (LUZON_PROVINCES.some((province) => areaName.includes(province))) {
+  const exactMatch = (provinces: string[]) =>
+    provinces.some((province) => {
+      const escapedProvince = province.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const regex = new RegExp(`\\b${escapedProvince}\\b`, "i");
+      return regex.test(areaName);
+    });
+
+  if (exactMatch(LUZON_PROVINCES)) {
     return "luzon";
   }
 
-  if (VISAYAS_PROVINCES.some((province) => areaName.includes(province))) {
+  if (exactMatch(VISAYAS_PROVINCES)) {
     return "visayas";
   }
 
-  if (MINDANAO_PROVINCES.some((province) => areaName.includes(province))) {
+  if (exactMatch(MINDANAO_PROVINCES)) {
     return "mindanao";
   }
 
