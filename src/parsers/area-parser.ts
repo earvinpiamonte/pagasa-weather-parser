@@ -227,7 +227,10 @@ export const containsAreaNames = (line: string): boolean => {
 };
 
 export const parseArea = (areaText: string): Area | null => {
-  let cleanArea = areaText.trim().replace(PATTERNS.cleanExtra, "");
+  let cleanArea = areaText
+    .trim()
+    .replace(PATTERNS.leadingDash, "")
+    .replace(PATTERNS.cleanExtra, "");
 
   // Remove "Typhoon force winds", "Storm force winds", "Gale force winds" prefixes
   cleanArea = cleanArea.replace(PATTERNS.typhoonForceWinds, "");
