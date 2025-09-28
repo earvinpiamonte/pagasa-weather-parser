@@ -17,13 +17,13 @@ const expected = {
       {
         level: 1,
         regions: {
-          luzon: [
+          luzon: [],
+          visayas: [
             {
               name: "Samar",
               parts: ["northern", "eastern"],
             },
           ],
-          visayas: [],
           mindanao: [],
         },
       },

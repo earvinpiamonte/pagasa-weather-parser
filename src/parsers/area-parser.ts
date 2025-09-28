@@ -1,4 +1,9 @@
 import { PATTERNS } from "../constants/patterns";
+import {
+  LUZON_PROVINCES,
+  VISAYAS_PROVINCES,
+  MINDANAO_PROVINCES,
+} from "../constants/regions";
 import { Area } from "../types/index";
 import {
   splitPreservingParentheses,
@@ -6,6 +11,24 @@ import {
   normalizeLocationName,
   fixCommonSpelling,
 } from "../utils/text-utils";
+
+const classifyAreaByRegion = (area: Area): "luzon" | "visayas" | "mindanao" => {
+  const areaName = area.name.toLowerCase();
+
+  if (LUZON_PROVINCES.some((province) => areaName.includes(province))) {
+    return "luzon";
+  }
+
+  if (VISAYAS_PROVINCES.some((province) => areaName.includes(province))) {
+    return "visayas";
+  }
+
+  if (MINDANAO_PROVINCES.some((province) => areaName.includes(province))) {
+    return "mindanao";
+  }
+
+  return "luzon";
+};
 
 export const extractRegionsFromBlock = (
   block: string
@@ -16,12 +39,20 @@ export const extractRegionsFromBlock = (
 } => {
   const rawAreaText = extractTcwsAreaText(block);
   const parsedAreas = rawAreaText ? parseAreasText(rawAreaText) : [];
+  const mergedAreas = mergeAreas(parsedAreas);
 
-  return {
-    luzon: mergeAreas(parsedAreas),
-    visayas: [],
-    mindanao: [],
+  const regions = {
+    luzon: [] as Area[],
+    visayas: [] as Area[],
+    mindanao: [] as Area[],
   };
+
+  for (const area of mergedAreas) {
+    const region = classifyAreaByRegion(area);
+    regions[region].push(area);
+  }
+
+  return regions;
 };
 
 export const extractTcwsAreaText = (block: string): string => {
