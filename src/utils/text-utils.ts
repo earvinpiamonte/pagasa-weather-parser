@@ -1,6 +1,60 @@
 import { PATTERNS } from "../constants/patterns";
+import {
+  LUZON_PROVINCES,
+  VISAYAS_PROVINCES,
+  MINDANAO_PROVINCES,
+} from "../constants/regions";
+
+const getProvinceRegion = (provinceName: string): string => {
+  const lower = provinceName.toLowerCase();
+
+  if (LUZON_PROVINCES.includes(lower)) {
+    return "luzon";
+  }
+
+  if (VISAYAS_PROVINCES.includes(lower)) {
+    return "visayas";
+  }
+
+  if (MINDANAO_PROVINCES.includes(lower)) {
+    return "mindanao";
+  }
+
+  return "unknown";
+};
+
+const splitAdjacentRegions = (text: string): string => {
+  const allProvinces = [
+    ...LUZON_PROVINCES,
+    ...VISAYAS_PROVINCES,
+    ...MINDANAO_PROVINCES,
+  ];
+
+  // Create a single regex with all province names, sorted by length (longer names first)
+  const provincePattern = allProvinces
+    .sort((a, b) => b.length - a.length)
+    .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+
+  const regex = new RegExp(
+    `\\b(${provincePattern})\\s+(${provincePattern})\\b`,
+    "gi"
+  );
+
+  return text.replace(regex, (match, province1, province2) => {
+    // Only split if they belong to different regions
+    const region1 = getProvinceRegion(province1);
+
+    const region2 = getProvinceRegion(province2);
+
+    return region1 !== region2 ? `${province1}, ${province2}` : match;
+  });
+};
 
 export const splitPreservingParentheses = (text: string): string[] => {
+  // First split any adjacent province names that should be separate
+  const preprocessedText = splitAdjacentRegions(text);
+
   const result: string[] = [];
   let current = "";
   let parenthesesDepth = 0;
@@ -8,9 +62,12 @@ export const splitPreservingParentheses = (text: string): string[] => {
 
   const AND_DELIMITER = " and ";
 
-  while (i < text.length) {
-    const char = text[i];
-    const nextChars = text.slice(i, i + AND_DELIMITER.length).toLowerCase();
+  while (i < preprocessedText.length) {
+    const char = preprocessedText[i];
+
+    const nextChars = preprocessedText
+      .slice(i, i + AND_DELIMITER.length)
+      .toLowerCase();
 
     if (char === "(") {
       parenthesesDepth++;
@@ -28,7 +85,7 @@ export const splitPreservingParentheses = (text: string): string[] => {
       // Check if this "and" is connecting parts of the same area or different areas
       // Look ahead to see if there's "portion" or "portions" after "and"
 
-      const restOfText = text.slice(i + AND_DELIMITER.length);
+      const restOfText = preprocessedText.slice(i + AND_DELIMITER.length);
 
       const isConnectingPortions = PATTERNS.connectingPortions.test(restOfText);
 
@@ -59,7 +116,38 @@ export const splitPreservingParentheses = (text: string): string[] => {
 };
 
 export const normalizeLocationName = (name: string): string => {
-  return name.trim().replace(/\.+$/, "");
+  const trimmed = name.trim().replace(/\.+$/, "");
+
+  // Keep certain words lowercase (articles, prepositions, etc.)
+  const keepLowercase = ["of", "del", "de", "la", "las", "los", "and", "the"];
+
+  // Properly capitalize the name while preserving original case for certain words
+  return trimmed
+    .split(" ")
+    .map((word, index) => {
+      if (word.length === 0) return word;
+
+      const lowerWord = word.toLowerCase();
+
+      // Always capitalize the first word, keep certain words lowercase if not first
+      if (index > 0 && keepLowercase.includes(lowerWord)) {
+        return lowerWord;
+      }
+
+      // Handle hyphenated words (like "Lal-Lo", "Sanchez-Mira")
+      if (word.includes("-")) {
+        return word
+          .split("-")
+          .map((part) => {
+            if (part.length === 0) return part;
+            return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+          })
+          .join("-");
+      }
+
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(" ");
 };
 
 export const fixCommonSpelling = (text: string): string => {
