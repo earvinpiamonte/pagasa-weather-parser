@@ -23,13 +23,13 @@ const expected = {
             { name: "Albay" },
             { name: "Sorsogon" },
             { name: "Masbate" },
-            { name: "Biliran" },
           ],
           visayas: [
             {
               name: "Samar",
               parts: ["rest", "eastern"],
             },
+            { name: "Biliran" },
             {
               name: "Leyte",
               parts: ["northern"],

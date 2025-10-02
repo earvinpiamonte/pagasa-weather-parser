@@ -38,6 +38,7 @@ export const LUZON_PROVINCES = [
 export const VISAYAS_PROVINCES = [
   "aklan",
   "antique",
+  "biliran",
   "bohol",
   "capiz",
   "cebu",
