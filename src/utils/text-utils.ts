@@ -5,6 +5,21 @@ import {
   MINDANAO_PROVINCES,
 } from "../constants/regions";
 
+const ALL_PROVINCES = [
+  ...LUZON_PROVINCES,
+  ...VISAYAS_PROVINCES,
+  ...MINDANAO_PROVINCES,
+];
+
+const PROVINCE_PATTERN = ALL_PROVINCES.sort((a, b) => b.length - a.length)
+  .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  .join("|");
+
+const ADJACENT_PROVINCES_REGEX = new RegExp(
+  `\\b(${PROVINCE_PATTERN})\\s+(${PROVINCE_PATTERN})\\b`,
+  "gi"
+);
+
 const getProvinceRegion = (provinceName: string): string => {
   const lower = provinceName.toLowerCase();
 
@@ -24,31 +39,20 @@ const getProvinceRegion = (provinceName: string): string => {
 };
 
 const splitAdjacentRegions = (text: string): string => {
-  const allProvinces = [
-    ...LUZON_PROVINCES,
-    ...VISAYAS_PROVINCES,
-    ...MINDANAO_PROVINCES,
-  ];
+  // Reset lastIndex to avoid stateful regex issues with the global flag
+  ADJACENT_PROVINCES_REGEX.lastIndex = 0;
 
-  // Create a single regex with all province names, sorted by length (longer names first)
-  const provincePattern = allProvinces
-    .sort((a, b) => b.length - a.length)
-    .map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-    .join("|");
+  return text.replace(
+    ADJACENT_PROVINCES_REGEX,
+    (match, province1, province2) => {
+      // Only split if they belong to different regions
+      const region1 = getProvinceRegion(province1);
 
-  const regex = new RegExp(
-    `\\b(${provincePattern})\\s+(${provincePattern})\\b`,
-    "gi"
+      const region2 = getProvinceRegion(province2);
+
+      return region1 !== region2 ? `${province1}, ${province2}` : match;
+    }
   );
-
-  return text.replace(regex, (match, province1, province2) => {
-    // Only split if they belong to different regions
-    const region1 = getProvinceRegion(province1);
-
-    const region2 = getProvinceRegion(province2);
-
-    return region1 !== region2 ? `${province1}, ${province2}` : match;
-  });
 };
 
 export const splitPreservingParentheses = (text: string): string[] => {
